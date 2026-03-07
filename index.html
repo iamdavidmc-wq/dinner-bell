@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Dinner Bell 🔔</title>
+    <title>Dinner Bell 🍽️</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -12,16 +15,30 @@
         }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Patrick Hand', cursive;
+            background: linear-gradient(135deg, #e67e22 0%, #f5deb3 100%);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            color: white;
+            color: #3d2b1f;
             padding: 20px;
             touch-action: manipulation;
+            position: relative;
+        }
+        
+        /* Subtle paper texture overlay */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: -1;
         }
         
         .container {
@@ -31,23 +48,27 @@
         }
         
         h1 {
-            font-size: 2.5rem;
+            font-size: 3rem;
             margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            font-family: 'Patrick Hand', cursive;
+            color: #5d4037;
         }
         
         .room-info {
-            background: rgba(255,255,255,0.2);
+            background: #fff8dc;
             padding: 15px 25px;
-            border-radius: 50px;
+            border-radius: 12px;
             margin-bottom: 30px;
-            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border: 2px solid #d4c4a8;
         }
         
         .room-label {
-            font-size: 0.9rem;
-            opacity: 0.9;
+            font-size: 1rem;
+            opacity: 0.8;
             margin-bottom: 5px;
+            font-family: 'Patrick Hand', cursive;
         }
         
         .room-code {
@@ -55,47 +76,149 @@
             font-weight: bold;
             letter-spacing: 5px;
             font-family: monospace;
+            color: #3d2b1f;
         }
         
+        /* Old-fashioned triangular bell button */
         .bell-button {
-            font-size: 8rem;
+            font-size: 0;
             background: none;
             border: none;
             cursor: pointer;
             transition: transform 0.2s;
-            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
             margin: 30px 0;
+            position: relative;
+            width: 160px;
+            height: 140px;
         }
         
         .bell-button:active {
-            transform: scale(0.9);
+            transform: scale(0.9) rotate(-5deg);
+        }
+        
+        .bell-icon {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+        
+        .bell-triangle {
+            width: 0;
+            height: 0;
+            border-left: 80px solid transparent;
+            border-right: 80px solid transparent;
+            border-bottom: 120px solid linear-gradient(to bottom, #d4a017, #b8860b, #8b6914);
+            position: absolute;
+            top: 0;
+            left: 0;
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
+        }
+        
+        .bell-triangle::after {
+            content: "";
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle, #ffd700, #b8860b);
+            border-radius: 50%;
+            top: 115px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.3);
+        }
+        
+        .bell-clapper {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: radial-gradient(circle at 30% 30%, #ffd700, #8b6914);
+            border-radius: 50%;
+            top: 110px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.4);
+            animation: none;
+        }
+        
+        .bell-button:active .bell-clapper {
+            animation: ring 0.15s ease-in-out 3;
+        }
+        
+        @keyframes ring {
+            0%, 100% { transform: translateX(-50%) rotate(0deg); }
+            25% { transform: translateX(-50%) rotate(15deg); }
+            75% { transform: translateX(-50%) rotate(-15deg); }
         }
         
         .bell-label {
-            font-size: 1.5rem;
-            margin-top: 10px;
+            font-size: 1.8rem;
+            margin-top: 5px;
             opacity: 0.9;
+            font-family: 'Patrick Hand', cursive;
+            color: #5d4037;
         }
         
         .message {
-            background: rgba(255,255,255,0.3);
-            padding: 20px;
-            border-radius: 15px;
+            background: #fff8dc;
+            padding: 25px 30px;
+            border-radius: 12px;
             margin-top: 30px;
-            min-height: 80px;
+            min-height: 100px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.3rem;
-            backdrop-filter: blur(10px);
+            font-size: 1.5rem;
+            line-height: 1.6;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border: 2px solid #d4c4a8;
+            position: relative;
+            /* Recipe card ruled lines */
+            background-image: repeating-linear-gradient(
+                to bottom,
+                transparent,
+                transparent 1.8rem,
+                #d4c4a8 1.8rem,
+                #d4c4a8 1.9rem
+            );
+            background-size: 100% 3.8rem;
         }
         
-        .pairing-section {
-            background: rgba(0,0,0,0.3);
+        .message-content {
+            background: rgba(255, 248, 220, 0.95);
+            padding: 10px 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        .setup-option {
+            background: #fff8dc;
             padding: 30px;
-            border-radius: 20px;
-            margin-top: 30px;
-            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            margin: 10px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border: 2px solid #d4c4a8;
+        }
+        
+        .big-button {
+            background: linear-gradient(to bottom, #8b4513, #654321);
+            color: white;
+            border: none;
+            padding: 18px 45px;
+            font-size: 1.4rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 10px;
+            min-width: 200px;
+            font-family: 'Patrick Hand', cursive;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            border: 2px solid #a0522d;
+        }
+        
+        .big-button:hover {
+            background: linear-gradient(to bottom, #9e5a2a, #755624);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.25);
         }
         
         .pairing-input {
@@ -103,27 +226,40 @@
             padding: 15px;
             font-size: 1.5rem;
             text-align: center;
-            border: none;
-            border-radius: 10px;
+            border: 2px solid #d4c4a8;
+            border-radius: 12px;
             margin-bottom: 15px;
             text-transform: uppercase;
             letter-spacing: 5px;
             max-width: 250px;
+            background: #fffef5;
+            font-family: monospace;
+            color: #3d2b1f;
+        }
+        
+        .pairing-input:focus {
+            outline: none;
+            border-color: #8b4513;
+            box-shadow: 0 0 0 3px rgba(139, 69, 19, 0.2);
         }
         
         .pairing-button {
-            background: #4CAF50;
+            background: linear-gradient(to bottom, #228b22, #1a6b1a);
             color: white;
             border: none;
             padding: 15px 40px;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             border-radius: 50px;
             cursor: pointer;
-            transition: background 0.3s;
+            transition: all 0.3s;
+            font-family: 'Patrick Hand', cursive;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            border: 2px solid #2e8b2e;
         }
         
         .pairing-button:hover {
-            background: #45a049;
+            background: linear-gradient(to bottom, #269926, #1e7b1e);
+            transform: translateY(-2px);
         }
         
         .hidden {
@@ -131,15 +267,37 @@
         }
         
         .ring-time {
-            font-size: 0.8rem;
-            margin-top: 5px;
+            font-size: 0.9rem;
+            margin-top: 8px;
             opacity: 0.7;
+            font-family: 'Patrick Hand', cursive;
+            color: #5d4037;
+        }
+        
+        .reset-link {
+            background:none;
+            border:none;
+            color: #8b4513;
+            font-size:1rem;
+            text-decoration:underline;
+            cursor:pointer;
+            margin-top:20px;
+            font-family: 'Patrick Hand', cursive;
+        }
+        
+        .reset-link:hover {
+            color: #654321;
+        }
+        
+        #pairingStatus {
+            font-family: 'Patrick Hand', cursive;
+            font-size: 1.1rem;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Dinner Bell 🔔</h1>
+        <h1>🍴 Dinner Bell 🔔</h1>
         
         <div id="pairingSection" class="pairing-section">
             <div class="room-label">Your Room Code</div>
@@ -160,12 +318,19 @@
                 <div class="ring-time" id="lastRing">Last rung: Never</div>
             </div>
             
-            <button id="bellBtn" class="bell-button">🔔</button>
+            <button id="bellBtn" class="bell-button">
+                <div class="bell-icon">
+                    <div class="bell-triangle"></div>
+                    <div class="bell-clapper"></div>
+                </div>
+            </button>
             <div class="bell-label">Tap to ring!</div>
             
             <div id="message" class="message">
-                Waiting for bell...
+                <div class="message-content">Connected & ready</div>
             </div>
+            
+            <button onclick="resetApp()" class="reset-link">Reset / Change Room</button>
         </div>
     </div>
 
@@ -204,6 +369,7 @@
         const mainApp = document.getElementById('mainApp');
         const bellBtn = document.getElementById('bellBtn');
         const message = document.getElementById('message');
+        const messageContent = document.querySelector('.message-content');
         const myRoomCodeEl = document.getElementById('myRoomCode');
         const currentRoomEl = document.getElementById('currentRoom');
         const pairingStatus = document.getElementById('pairingStatus');
@@ -228,7 +394,7 @@
             const code = pairingInput.value.trim().toUpperCase();
             if (code.length !== 6 || !/^\d+$/.test(code)) {
                 pairingStatus.textContent = "Please enter a valid 6-digit code";
-                pairingStatus.style.color = "#ffcccc";
+                pairingStatus.style.color = "#8b0000";
                 return;
             }
             
@@ -242,7 +408,7 @@
                 enterRoom(code);
             }).catch(() => {
                 pairingStatus.textContent = "Could not connect. Make sure the code is correct.";
-                pairingStatus.style.color = "#ffcccc";
+                pairingStatus.style.color = "#8b0000";
             });
         }
         
@@ -252,13 +418,13 @@
             pairingSection.classList.add('hidden');
             mainApp.classList.remove('hidden');
             
-            // Listen for ring events
+            // Listen for ring events (receiver)
             const ringRef = db.ref('rooms/' + roomCode + '/ring');
             ringRef.on('value', (snapshot) => {
                 const data = snapshot.val();
                 if (data && data.active === true) {
-                    // Bell is ringing!
-                    triggerBell();
+                    // Bell is ringing! This is the receiver
+                    triggerBell(true);
                     
                     // Update last ring time
                     const time = new Date(data.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
@@ -282,7 +448,7 @@
             return id;
         }
         
-        function triggerBell() {
+        function triggerBell(isReceiver) {
             // Play sound three times
             let playCount = 0;
             const maxPlays = 3;
@@ -292,25 +458,39 @@
                     bellAudio.currentTime = 0;
                     bellAudio.play().catch(e => console.log('Audio play failed:', e));
                     playCount++;
-                    // Wait for audio to finish (or 1 second) before next play
                     setTimeout(playNext, 1200);
                 }
             }
             
             playNext();
             
-            // Show message
-            message.innerHTML = "🔔 <strong>Dinner's Ready!</strong>";
-            message.style.background = "rgba(76, 175, 80, 0.4)";
-            
-            setTimeout(() => {
-                message.innerHTML = "Connected & ready";
-                message.style.background = "rgba(255,255,255,0.3)";
-            }, 5000);
+            if (isReceiver) {
+                // Receiver sees the excited message
+                messageContent.innerHTML = "<strong>Dinner is ready!</strong><br>COME AND GET EAAAAAAT!!! 🔥";
+                message.style.background = "rgba(230, 126, 34, 0.25)";
+                
+                // Keep message for 8 seconds then back to ready
+                setTimeout(() => {
+                    messageContent.innerHTML = "Connected & ready";
+                    message.style.background = "rgba(255, 248, 220, 0.7)";
+                }, 8000);
+            } else {
+                // Sender sees brief confirmation
+                messageContent.innerHTML = "Dinner bell ringing...";
+                message.style.background = "rgba(139, 69, 19, 0.2)";
+                
+                // Back to ready after 2 seconds
+                setTimeout(() => {
+                    messageContent.innerHTML = "Connected & ready";
+                    message.style.background = "rgba(255, 248, 220, 0.7)";
+                }, 2000);
+            }
         }
         
-        // Bell button press
+        // Bell button press (sender)
         bellBtn.addEventListener('click', () => {
+            if (!currentRoom) return;
+            
             // Write ring event to database
             db.ref('rooms/' + currentRoom + '/ring').set({
                 active: true,
@@ -319,19 +499,36 @@
             
             // Also update last ring time locally
             const now = new Date();
-            lastRingEl.textContent = `Last rung: ${now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
+            lastRingEl.textContent = `Last rung: ${now.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}`;
             
-            // Visual feedback
+            // Show sender's brief feedback
+            triggerBell(false);
+            
+            // Visual button feedback
             bellBtn.style.transform = 'scale(0.9)';
             setTimeout(() => {
                 bellBtn.style.transform = 'scale(1)';
             }, 200);
         });
         
-        // Request notification permission (optional, for better mobile experience)
-        if ('Notification' in window && Notification.permission === 'default') {
-            Notification.requestPermission();
+        function resetApp() {
+            localStorage.removeItem('dinnerBellCurrentRoom');
+            localStorage.removeItem('dinnerBellPairedRoom');
+            if (currentRoom) {
+                db.ref('rooms/' + currentRoom + '/ring').off();
+            }
+            location.reload();
         }
+        
+        // On load: check if we have a saved room
+        window.addEventListener('load', () => {
+            const savedRoom = localStorage.getItem('dinnerBellCurrentRoom');
+            if (savedRoom) {
+                enterRoom(savedRoom);
+            } else {
+                // Stay on setup screen
+            }
+        });
     </script>
 </body>
 </html>
