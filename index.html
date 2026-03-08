@@ -394,7 +394,7 @@
         }
         
         function triggerBell(isReceiver) {
-            // Play sound three times with longer gap to let each ring finish
+            // Play sound three times, waiting for each to finish
             let playCount = 0;
             const maxPlays = 3;
             
@@ -403,11 +403,18 @@
                     bellAudio.currentTime = 0;
                     bellAudio.play().catch(e => console.log('Audio play failed:', e));
                     playCount++;
-                    // Wait 2 seconds between rings to let each one finish
-                    setTimeout(playNext, 2000);
                 }
             }
             
+            // Listen for when audio ends, then play next ring
+            bellAudio.onended = function() {
+                if (playCount < maxPlays) {
+                    // Wait a brief pause between rings (0.8 seconds)
+                    setTimeout(playNext, 800);
+                }
+            };
+            
+            // Start first ring
             playNext();
             
             if (isReceiver) {
