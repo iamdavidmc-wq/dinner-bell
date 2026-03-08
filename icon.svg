@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192">
+  <!-- Rounded cream background -->
+  <rect width="192" height="192" rx="32" fill="#fff8dc"/>
+  <!-- Crossed fork and knife behind the bell -->
+  <g stroke="#3d2b1f" stroke-width="7" stroke-linecap="round">
+    <line x1="35" y1="60" x2="157" y2="150"/>
+    <line x1="157" y1="60" x2="35" y2="150"/>
+  </g>
+  <!-- Bell -->
+  <polygon points="96,40 60,130 132,130" fill="#e67e22"/>
+  <!-- Clapper -->
+  <circle cx="96" cy="138" r="8" fill="#b8860b"/>
+</svg>
