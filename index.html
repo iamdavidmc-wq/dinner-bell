@@ -79,75 +79,19 @@
             color: #3d2b1f;
         }
         
-        /* Old-fashioned triangular bell button */
         .bell-button {
-            font-size: 0;
+            font-size: 12rem;
             background: none;
             border: none;
             cursor: pointer;
             transition: transform 0.2s;
-            margin: 30px 0;
-            position: relative;
-            width: 160px;
-            height: 140px;
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
+            margin: 10px 0;
+            line-height: 1;
         }
         
         .bell-button:active {
-            transform: scale(0.9) rotate(-5deg);
-        }
-        
-        .bell-icon {
-            width: 100%;
-            height: 100%;
-            position: relative;
-        }
-        
-        .bell-triangle {
-            width: 0;
-            height: 0;
-            border-left: 80px solid transparent;
-            border-right: 80px solid transparent;
-            border-bottom: 120px solid linear-gradient(to bottom, #d4a017, #b8860b, #8b6914);
-            position: absolute;
-            top: 0;
-            left: 0;
-            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
-        }
-        
-        .bell-triangle::after {
-            content: "";
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background: radial-gradient(circle, #ffd700, #b8860b);
-            border-radius: 50%;
-            top: 115px;
-            left: 50%;
-            transform: translateX(-50%);
-            box-shadow: 0 5px 10px rgba(0,0,0,0.3);
-        }
-        
-        .bell-clapper {
-            position: absolute;
-            width: 12px;
-            height: 12px;
-            background: radial-gradient(circle at 30% 30%, #ffd700, #8b6914);
-            border-radius: 50%;
-            top: 110px;
-            left: 50%;
-            transform: translateX(-50%);
-            box-shadow: 0 5px 10px rgba(0,0,0,0.4);
-            animation: none;
-        }
-        
-        .bell-button:active .bell-clapper {
-            animation: ring 0.15s ease-in-out 3;
-        }
-        
-        @keyframes ring {
-            0%, 100% { transform: translateX(-50%) rotate(0deg); }
-            25% { transform: translateX(-50%) rotate(15deg); }
-            75% { transform: translateX(-50%) rotate(-15deg); }
+            transform: scale(0.9);
         }
         
         .bell-label {
@@ -162,7 +106,7 @@
             background: #fff8dc;
             padding: 25px 30px;
             border-radius: 12px;
-            margin-top: 30px;
+            margin-top: 20px;
             min-height: 100px;
             display: flex;
             align-items: center;
@@ -318,12 +262,7 @@
                 <div class="ring-time" id="lastRing">Last rung: Never</div>
             </div>
             
-            <button id="bellBtn" class="bell-button">
-                <div class="bell-icon">
-                    <div class="bell-triangle"></div>
-                    <div class="bell-clapper"></div>
-                </div>
-            </button>
+            <button id="bellBtn" class="bell-button">🔔</button>
             <div class="bell-label">Tap to ring!</div>
             
             <div id="message" class="message">
@@ -466,7 +405,7 @@
             
             if (isReceiver) {
                 // Receiver sees the excited message
-                messageContent.innerHTML = "<strong>Dinner is ready!</strong><br>COME AND GET EAAAAAAT!!! 🔥";
+                messageContent.innerHTML = "<strong>Dinner is ready!</strong><br>COME AND GET EAT! 🔥";
                 message.style.background = "rgba(230, 126, 34, 0.25)";
                 
                 // Keep message for 8 seconds then back to ready
