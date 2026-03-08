@@ -472,6 +472,7 @@
         });
         
         function resetApp() {
+            localStorage.removeItem('dinnerBellRoom');
             localStorage.removeItem('dinnerBellCurrentRoom');
             localStorage.removeItem('dinnerBellPairedRoom');
             if (currentRoom) {
