@@ -363,17 +363,24 @@
             pairingSection.classList.add('hidden');
             mainApp.classList.remove('hidden');
             
+            // Track when we joined to ignore old ring events
+            const joinTime = Date.now();
+            
             // Listen for ring events (receiver)
             const ringRef = db.ref('rooms/' + roomCode + '/ring');
             ringRef.on('value', (snapshot) => {
                 const data = snapshot.val();
                 if (data && data.active === true) {
-                    // Bell is ringing! This is the receiver
-                    triggerBell(true);
-                    
-                    // Update last ring time
-                    const time = new Date(data.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-                    lastRingEl.textContent = `Last rung: ${time}`;
+                    // Only trigger if ring happened after we joined (within 1 second grace period)
+                    const ringTime = data.timestamp;
+                    if (ringTime >= joinTime - 1000) {
+                        // Bell is ringing! This is the receiver
+                        triggerBell(true);
+                        
+                        // Update last ring time
+                        const time = new Date(ringTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                        lastRingEl.textContent = `Last rung: ${time}`;
+                    }
                 }
             });
             
