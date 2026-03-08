@@ -1,13 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192">
-  <!-- Rounded cream background -->
-  <rect width="192" height="192" rx="32" fill="#fff8dc"/>
-  <!-- Crossed fork and knife behind the bell -->
-  <g stroke="#3d2b1f" stroke-width="7" stroke-linecap="round">
-    <line x1="35" y1="60" x2="157" y2="150"/>
-    <line x1="157" y1="60" x2="35" y2="150"/>
-  </g>
-  <!-- Bell -->
-  <polygon points="96,40 60,130 132,130" fill="#e67e22"/>
+  <!-- Warm cream background -->
+  <rect width="192" height="192" rx="40" fill="#fff8dc"/>
+  <!-- Bell dome -->
+  <path d="M96 45 Q140 45 140 110 L140 120 L52 120 L52 110 Q52 45 96 45" fill="#e67e22"/>
+  <!-- Bell highlight -->
+  <path d="M96 45 Q125 45 125 110 L125 115 L75 115 L75 110 Q75 45 96 45" fill="#f39c12"/>
   <!-- Clapper -->
-  <circle cx="96" cy="138" r="8" fill="#b8860b"/>
+  <circle cx="96" cy="128" r="12" fill="#b8860b"/>
+  <!-- Handle loop -->
+  <ellipse cx="96" cy="38" rx="14" ry="10" fill="none" stroke="#8b4513" stroke-width="6"/>
+  <!-- Shine -->
+  <ellipse cx="75" cy="80" rx="12" ry="20" fill="#ffffff" opacity="0.25"/>
 </svg>
