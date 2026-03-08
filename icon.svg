@@ -1,14 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192">
   <!-- Warm cream background -->
   <rect width="192" height="192" rx="40" fill="#fff8dc"/>
-  <!-- Bell dome -->
-  <path d="M96 45 Q140 45 140 110 L140 120 L52 120 L52 110 Q52 45 96 45" fill="#e67e22"/>
-  <!-- Bell highlight -->
-  <path d="M96 45 Q125 45 125 110 L125 115 L75 115 L75 110 Q75 45 96 45" fill="#f39c12"/>
-  <!-- Clapper -->
-  <circle cx="96" cy="128" r="12" fill="#b8860b"/>
-  <!-- Handle loop -->
-  <ellipse cx="96" cy="38" rx="14" ry="10" fill="none" stroke="#8b4513" stroke-width="6"/>
-  <!-- Shine -->
-  <ellipse cx="75" cy="80" rx="12" ry="20" fill="#ffffff" opacity="0.25"/>
+  <!-- Bell dome - moved lower -->
+  <path d="M96 55 Q140 55 140 120 L140 130 L52 130 L52 120 Q52 55 96 55" fill="#e67e22"/>
+  <!-- Bell highlight - moved lower -->
+  <path d="M96 55 Q125 55 125 120 L125 125 L75 125 L75 120 Q75 55 96 55" fill="#f39c12"/>
+  <!-- Clapper - moved lower -->
+  <circle cx="96" cy="138" r="12" fill="#b8860b"/>
+  <!-- Handle loop - moved lower -->
+  <ellipse cx="96" cy="48" rx="14" ry="10" fill="none" stroke="#8b4513" stroke-width="6"/>
+  <!-- Shine - moved lower -->
+  <ellipse cx="75" cy="90" rx="12" ry="20" fill="#ffffff" opacity="0.25"/>
 </svg>
