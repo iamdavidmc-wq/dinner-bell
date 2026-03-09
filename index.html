@@ -276,20 +276,20 @@
         </div>
         
         <div id="mainApp" class="hidden">
-            <!-- BELL SECTION - Top of page -->
-            <div style="padding-bottom: 15px; border-bottom: 2px dashed #d4c4a8; margin-bottom: 20px;">
-                <h2 style="font-size: 1rem; color: #8b4513; margin-bottom: 10px; font-family: 'Patrick Hand', cursive;">🔔 DINNER BELL</h2>
+            <!-- BELL SECTION - Top of page, higher position -->
+            <div style="padding-bottom: 12px; border-bottom: 2px dashed #d4c4a8; margin-bottom: 8px;">
+                <h2 style="font-size: 1.3rem; color: #8b4513; margin-bottom: 8px; font-family: 'Patrick Hand', cursive;">🔔 DINNER BELL</h2>
                 
                 <!-- Large centered bell -->
                 <button id="bellBtn" class="bell-button">🔔</button>
                 
                 <!-- Status text below bell -->
-                <div id="statusText" style="font-size: 1.2rem; color: #5d4037; margin-top: 8px;">Ready</div>
+                <div id="statusText" style="font-size: 1.2rem; color: #5d4037; margin-top: 5px;">Ready</div>
             </div>
             
-            <!-- TIMER SECTION - Scroll down to see -->
-            <div style="padding-top: 10px;">
-                <h2 style="font-size: 1rem; color: #8b4513; margin-bottom: 10px; font-family: 'Patrick Hand', cursive;">⏰ DINNER TIMER</h2>
+            <!-- TIMER SECTION - Lower position, more spacing -->
+            <div style="padding-top: 15px;">
+                <h2 style="font-size: 1.3rem; color: #8b4513; margin-bottom: 10px; font-family: 'Patrick Hand', cursive;">⏰ DINNER TIMER</h2>
                 
                 <!-- Timer inputs - 20% larger -->
                 <div style="display: flex; gap: 10px; align-items: center; justify-content: center;">
@@ -310,7 +310,7 @@
             </div>
             
             <!-- Bottom row: Room code | Awake | Reset -->
-            <div style="margin-top: 30px; display: flex; gap: 20px; justify-content: center; align-items: center; flex-wrap: wrap;">
+            <div style="margin-top: 25px; display: flex; gap: 20px; justify-content: center; align-items: center; flex-wrap: wrap;">
                 <span id="roomInfoSmall" style="font-size: 0.8rem; color: #8b4513; opacity: 0.5;">Room: <span id="currentRoomSmall">---</span></span>
                 <button id="wakeLockBtn" onclick="toggleWakeLock()" style="background: rgba(139, 69, 19, 0.1); border: 1px solid #d4c4a8; padding: 8px 15px; border-radius: 20px; color: #8b4513; font-family: 'Patrick Hand', cursive; font-size: 0.85rem;">Awake</button>
                 <button onclick="resetApp()" style="background: none; border: none; color: #8b4513; font-size: 0.85rem; text-decoration: underline; font-family: 'Patrick Hand', cursive;">Reset</button>
@@ -585,6 +585,18 @@
             }
             playNext();
         }
+        
+        // Timer keyboard support - press Enter to start
+        document.getElementById('timerMinutes').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('timerSeconds').focus();
+            }
+        });
+        document.getElementById('timerSeconds').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                startTimer();
+            }
+        });
         
         // Wake Lock functionality
         let wakeLock = null;
