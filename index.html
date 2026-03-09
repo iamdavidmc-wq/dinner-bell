@@ -260,14 +260,15 @@
 </head>
 <body>
     <div class="container">
-        <h1>🍴 Dinner Bell 🔔</h1>
+        <!-- Show title only in pairing mode -->
+        <h1 id="title" style="font-size: 2rem; margin-bottom: 15px;">🍴 Dinner Bell 🔔</h1>
         
-        <div id="pairingSection" class="pairing-section">
+        <div id="pairingSection">
             <div class="room-label">Your Room Code</div>
             <div id="myRoomCode" class="room-code">---</div>
-            <p style="margin: 15px 0; opacity: 0.8;">Share this with the other phone</p>
+            <p style="margin: 15px 0; opacity: 0.8;">Share this code</p>
             
-            <div style="margin: 20px 0; opacity: 0.5;">— or —</div>
+            <div style="margin: 15px 0; opacity: 0.5;">— or —</div>
             
             <input type="text" id="pairingCode" class="pairing-input" placeholder="ENTER CODE" maxlength="6">
             <button onclick="pairWithRoom()" class="pairing-button">Connect</button>
@@ -275,31 +276,30 @@
         </div>
         
         <div id="mainApp" class="hidden">
-            <!-- Hidden room info - shown subtly below -->
-            <div id="roomInfo" style="font-size: 0.75rem; color: #5d4037; opacity: 0.6; margin-bottom: 10px;">
-                Room: <span id="currentRoomSmall">---</span>
-            </div>
-            
+            <!-- Large centered bell - main focus -->
             <button id="bellBtn" class="bell-button">🔔</button>
             
-            <!-- Small status indicator instead of large message box -->
-            <div id="statusText" style="font-size: 1rem; color: #5d4037; margin-top: 5px; min-height: 24px;">Ready</div>
+            <!-- Status text below bell -->
+            <div id="statusText" style="font-size: 1.2rem; color: #5d4037; margin-top: 8px;">Ready</div>
             
-            <!-- Timer Section -->
-            <div style="margin-top: 15px; display: flex; gap: 10px; align-items: center; justify-content: center; flex-wrap: wrap;">
-                <input type="number" id="timerMinutes" placeholder="Min" min="0" max="99" style="width: 60px; padding: 8px; border-radius: 8px; border: 2px solid #d4c4a8; font-size: 1rem; text-align: center;">
-                <span style="color: #5d4037;">min</span>
-                <input type="number" id="timerSeconds" placeholder="Sec" min="0" max="59" style="width: 60px; padding: 8px; border-radius: 8px; border: 2px solid #d4c4a8; font-size: 1rem; text-align: center;">
-                <span style="color: #5d4037;">sec</span>
-                <button onclick="startTimer()" style="background: #228b22; color: white; border: none; padding: 8px 20px; border-radius: 20px; font-family: 'Patrick Hand', cursive; font-size: 1rem;">Start</button>
-                <button onclick="stopTimer()" style="background: #8b4513; color: white; border: none; padding: 8px 20px; border-radius: 20px; font-family: 'Patrick Hand', cursive; font-size: 1rem;">Stop</button>
+            <!-- Compact Timer row -->
+            <div style="margin-top: 20px; display: flex; gap: 8px; align-items: center; justify-content: center;">
+                <input type="number" id="timerMinutes" placeholder="0" min="0" max="99" style="width: 50px; padding: 8px; border-radius: 10px; border: 2px solid #d4c4a8; font-size: 1rem; text-align: center; font-family: 'Patrick Hand', cursive;">
+                <span style="color: #8b4513; font-size: 0.9rem;">m</span>
+                <input type="number" id="timerSeconds" placeholder="0" min="0" max="59" style="width: 50px; padding: 8px; border-radius: 10px; border: 2px solid #d4c4a8; font-size: 1rem; text-align: center; font-family: 'Patrick Hand', cursive;">
+                <span style="color: #8b4513; font-size: 0.9rem;">s</span>
+                <button onclick="startTimer()" style="background: #228b22; color: white; border: none; padding: 8px 16px; border-radius: 15px; font-family: 'Patrick Hand', cursive; font-size: 0.9rem;">Start</button>
+                <button onclick="stopTimer()" style="background: #8b4513; color: white; border: none; padding: 8px 16px; border-radius: 15px; font-family: 'Patrick Hand', cursive; font-size: 0.9rem;">Stop</button>
             </div>
-            <div id="timerDisplay" style="font-size: 1.5rem; color: #e67e22; font-weight: bold; margin-top: 5px; min-height: 30px;"></div>
             
-            <!-- Bottom controls -->
-            <div style="margin-top: 20px; display: flex; gap: 20px; justify-content: center;">
-                <button id="wakeLockBtn" onclick="toggleWakeLock()" style="background: rgba(139, 69, 19, 0.15); border: 2px solid #d4c4a8; padding: 8px 15px; border-radius: 20px; color: #8b4513; font-family: 'Patrick Hand', cursive; font-size: 0.9rem;">Awake: Off</button>
-                <button onclick="resetApp()" style="background: none; border: none; color: #8b4513; font-size: 0.9rem; text-decoration: underline; font-family: 'Patrick Hand', cursive;">Reset</button>
+            <!-- Timer countdown display -->
+            <div id="timerDisplay" style="font-size: 2rem; color: #e67e22; font-weight: bold; margin-top: 8px; min-height: 36px;"></div>
+            
+            <!-- Bottom row: Room code | Awake | Reset -->
+            <div style="margin-top: 25px; display: flex; gap: 15px; justify-content: center; align-items: center; flex-wrap: wrap;">
+                <span id="roomInfoSmall" style="font-size: 0.75rem; color: #8b4513; opacity: 0.5;">Room: <span id="currentRoomSmall">---</span></span>
+                <button id="wakeLockBtn" onclick="toggleWakeLock()" style="background: rgba(139, 69, 19, 0.1); border: 1px solid #d4c4a8; padding: 6px 12px; border-radius: 15px; color: #8b4513; font-family: 'Patrick Hand', cursive; font-size: 0.8rem;">Awake</button>
+                <button onclick="resetApp()" style="background: none; border: none; color: #8b4513; font-size: 0.8rem; text-decoration: underline; font-family: 'Patrick Hand', cursive;">Reset</button>
             </div>
         </div>
     </div>
@@ -385,6 +385,7 @@
         function enterRoom(roomCode) {
             currentRoom = roomCode;
             document.getElementById('currentRoomSmall').textContent = roomCode;
+            document.getElementById('title').style.display = 'none';
             pairingSection.classList.add('hidden');
             mainApp.classList.remove('hidden');
             
@@ -618,6 +619,9 @@
                 wakeLock = null;
             }
             wakeLockEnabled = false;
+            
+            // Show title again
+            document.getElementById('title').style.display = 'block';
             
             localStorage.removeItem('dinnerBellRoom');
             localStorage.removeItem('dinnerBellCurrentRoom');
