@@ -86,7 +86,7 @@
         }
         
         .bell-button {
-            font-size: 12rem;
+            font-size: 14rem;
             background: none;
             border: none;
             cursor: pointer;
@@ -276,30 +276,44 @@
         </div>
         
         <div id="mainApp" class="hidden">
-            <!-- Large centered bell - main focus -->
-            <button id="bellBtn" class="bell-button">🔔</button>
-            
-            <!-- Status text below bell -->
-            <div id="statusText" style="font-size: 1.2rem; color: #5d4037; margin-top: 8px;">Ready</div>
-            
-            <!-- Compact Timer row -->
-            <div style="margin-top: 20px; display: flex; gap: 8px; align-items: center; justify-content: center;">
-                <input type="number" id="timerMinutes" placeholder="0" min="0" max="99" style="width: 50px; padding: 8px; border-radius: 10px; border: 2px solid #d4c4a8; font-size: 1rem; text-align: center; font-family: 'Patrick Hand', cursive;">
-                <span style="color: #8b4513; font-size: 0.9rem;">m</span>
-                <input type="number" id="timerSeconds" placeholder="0" min="0" max="59" style="width: 50px; padding: 8px; border-radius: 10px; border: 2px solid #d4c4a8; font-size: 1rem; text-align: center; font-family: 'Patrick Hand', cursive;">
-                <span style="color: #8b4513; font-size: 0.9rem;">s</span>
-                <button onclick="startTimer()" style="background: #228b22; color: white; border: none; padding: 8px 16px; border-radius: 15px; font-family: 'Patrick Hand', cursive; font-size: 0.9rem;">Start</button>
-                <button onclick="stopTimer()" style="background: #8b4513; color: white; border: none; padding: 8px 16px; border-radius: 15px; font-family: 'Patrick Hand', cursive; font-size: 0.9rem;">Stop</button>
+            <!-- BELL SECTION - Top of page -->
+            <div style="padding-bottom: 15px; border-bottom: 2px dashed #d4c4a8; margin-bottom: 20px;">
+                <h2 style="font-size: 1rem; color: #8b4513; margin-bottom: 10px; font-family: 'Patrick Hand', cursive;">🔔 DINNER BELL</h2>
+                
+                <!-- Large centered bell -->
+                <button id="bellBtn" class="bell-button">🔔</button>
+                
+                <!-- Status text below bell -->
+                <div id="statusText" style="font-size: 1.2rem; color: #5d4037; margin-top: 8px;">Ready</div>
             </div>
             
-            <!-- Timer countdown display -->
-            <div id="timerDisplay" style="font-size: 2rem; color: #e67e22; font-weight: bold; margin-top: 8px; min-height: 36px;"></div>
+            <!-- TIMER SECTION - Scroll down to see -->
+            <div style="padding-top: 10px;">
+                <h2 style="font-size: 1rem; color: #8b4513; margin-bottom: 10px; font-family: 'Patrick Hand', cursive;">⏰ DINNER TIMER</h2>
+                
+                <!-- Timer inputs - 20% larger -->
+                <div style="display: flex; gap: 10px; align-items: center; justify-content: center;">
+                    <input type="number" id="timerMinutes" placeholder="0" min="0" max="99" style="width: 65px; padding: 12px; border-radius: 12px; border: 2px solid #d4c4a8; font-size: 1.2rem; text-align: center; font-family: 'Patrick Hand', cursive;">
+                    <span style="color: #8b4513; font-size: 1rem;">min</span>
+                    <input type="number" id="timerSeconds" placeholder="0" min="0" max="59" style="width: 65px; padding: 12px; border-radius: 12px; border: 2px solid #d4c4a8; font-size: 1.2rem; text-align: center; font-family: 'Patrick Hand', cursive;">
+                    <span style="color: #8b4513; font-size: 1rem;">sec</span>
+                </div>
+                
+                <!-- Timer buttons - 20% larger -->
+                <div style="display: flex; gap: 15px; justify-content: center; margin-top: 12px;">
+                    <button onclick="startTimer()" style="background: #228b22; color: white; border: none; padding: 12px 30px; border-radius: 25px; font-family: 'Patrick Hand', cursive; font-size: 1.1rem;">Start</button>
+                    <button onclick="stopTimer()" style="background: #8b4513; color: white; border: none; padding: 12px 30px; border-radius: 25px; font-family: 'Patrick Hand', cursive; font-size: 1.1rem;">Stop</button>
+                </div>
+                
+                <!-- Timer countdown display -->
+                <div id="timerDisplay" style="font-size: 2.5rem; color: #e67e22; font-weight: bold; margin-top: 15px; min-height: 45px;"></div>
+            </div>
             
             <!-- Bottom row: Room code | Awake | Reset -->
-            <div style="margin-top: 25px; display: flex; gap: 15px; justify-content: center; align-items: center; flex-wrap: wrap;">
-                <span id="roomInfoSmall" style="font-size: 0.75rem; color: #8b4513; opacity: 0.5;">Room: <span id="currentRoomSmall">---</span></span>
-                <button id="wakeLockBtn" onclick="toggleWakeLock()" style="background: rgba(139, 69, 19, 0.1); border: 1px solid #d4c4a8; padding: 6px 12px; border-radius: 15px; color: #8b4513; font-family: 'Patrick Hand', cursive; font-size: 0.8rem;">Awake</button>
-                <button onclick="resetApp()" style="background: none; border: none; color: #8b4513; font-size: 0.8rem; text-decoration: underline; font-family: 'Patrick Hand', cursive;">Reset</button>
+            <div style="margin-top: 30px; display: flex; gap: 20px; justify-content: center; align-items: center; flex-wrap: wrap;">
+                <span id="roomInfoSmall" style="font-size: 0.8rem; color: #8b4513; opacity: 0.5;">Room: <span id="currentRoomSmall">---</span></span>
+                <button id="wakeLockBtn" onclick="toggleWakeLock()" style="background: rgba(139, 69, 19, 0.1); border: 1px solid #d4c4a8; padding: 8px 15px; border-radius: 20px; color: #8b4513; font-family: 'Patrick Hand', cursive; font-size: 0.85rem;">Awake</button>
+                <button onclick="resetApp()" style="background: none; border: none; color: #8b4513; font-size: 0.85rem; text-decoration: underline; font-family: 'Patrick Hand', cursive;">Reset</button>
             </div>
         </div>
     </div>
