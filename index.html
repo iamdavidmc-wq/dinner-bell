@@ -287,26 +287,45 @@
                 <div id="statusText" style="font-size: 1.2rem; color: #5d4037; margin-top: 5px;">Ready</div>
             </div>
             
-            <!-- TIMER SECTION - Lower position, more spacing -->
+            <!-- TIMER SECTION - Option B: Horizontal inputs, buttons below -->
             <div style="padding-top: 20px;">
                 <h2 style="font-size: 1.3rem; color: #8b4513; margin-bottom: 10px; font-family: 'Patrick Hand', cursive;">⏰ DINNER TIMER</h2>
                 
-                <!-- Timer inputs - 20% larger -->
-                <div style="display: flex; gap: 10px; align-items: center; justify-content: center;">
-                    <input type="number" id="timerMinutes" placeholder="0" min="0" max="99" style="width: 65px; padding: 12px; border-radius: 12px; border: 2px solid #d4c4a8; font-size: 1.2rem; text-align: center; font-family: 'Patrick Hand', cursive;">
-                    <span style="color: #8b4513; font-size: 1rem;">min</span>
-                    <input type="number" id="timerSeconds" placeholder="0" min="0" max="59" style="width: 65px; padding: 12px; border-radius: 12px; border: 2px solid #d4c4a8; font-size: 1.2rem; text-align: center; font-family: 'Patrick Hand', cursive;">
-                    <span style="color: #8b4513; font-size: 1rem;">sec</span>
+                <!-- Timer inputs on one row -->
+                <div style="display: flex; gap: 15px; align-items: center; justify-content: center; margin-bottom: 15px;">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <input type="number" id="timerMinutes" placeholder="0" min="0" max="99" 
+                               style="width: 65px; padding: 12px; border-radius: 12px; border: 2px solid #d4c4a8; font-size: 1.2rem; text-align: center; font-family: 'Patrick Hand', cursive;">
+                        <span style="color: #8b4513; font-size: 1rem;">min</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <input type="number" id="timerSeconds" placeholder="0" min="0" max="59" 
+                               style="width: 65px; padding: 12px; border-radius: 12px; border: 2px solid #d4c4a8; font-size: 1.2rem; text-align: center; font-family: 'Patrick Hand', cursive;">
+                        <span style="color: #8b4513; font-size: 1rem;">sec</span>
+                    </div>
                 </div>
                 
-                <!-- Timer buttons - 20% larger -->
-                <div style="display: flex; gap: 15px; justify-content: center; margin-top: 12px;">
-                    <button onclick="startTimer()" style="background: #228b22; color: white; border: none; padding: 12px 30px; border-radius: 25px; font-family: 'Patrick Hand', cursive; font-size: 1.1rem;">Start</button>
-                    <button onclick="stopTimer()" style="background: #8b4513; color: white; border: none; padding: 12px 30px; border-radius: 25px; font-family: 'Patrick Hand', cursive; font-size: 1.1rem;">Stop</button>
+                <!-- Start/Stop buttons on second row -->
+                <div style="display: flex; gap: 20px; justify-content: center; margin-bottom: 10px;">
+                    <button onclick="startTimer()" 
+                            style="background: #228b22; color: white; border: none; padding: 12px 30px; border-radius: 25px; font-family: 'Patrick Hand', cursive; font-size: 1.1rem;">Start</button>
+                    <button onclick="stopTimer()" 
+                            style="background: #8b4513; color: white; border: none; padding: 12px 30px; border-radius: 25px; font-family: 'Patrick Hand', cursive; font-size: 1.1rem;">Stop</button>
                 </div>
                 
                 <!-- Timer countdown display -->
-                <div id="timerDisplay" style="font-size: 2.5rem; color: #e67e22; font-weight: bold; margin-top: 15px; min-height: 45px;"></div>
+                <div id="timerDisplay" style="font-size: 2.5rem; color: #e67e22; font-weight: bold; margin-top: 10px; min-height: 45px;"></div>
+                
+                <!-- Option E: Preset buttons (scroll down to see) -->
+                <div style="margin-top: 25px; padding-top: 15px; border-top: 2px dashed #d4c4a8;">
+                    <p style="font-size: 0.9rem; color: #8b4513; text-align: center; margin-bottom: 10px; font-family: 'Patrick Hand', cursive;">Quick Presets</p>
+                    <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                        <button onclick="setPreset(10)" style="background: #e67e22; color: white; border: none; padding: 10px 20px; border-radius: 20px; font-family: 'Patrick Hand', cursive; font-size: 1rem;">10 min</button>
+                        <button onclick="setPreset(5)" style="background: #e67e22; color: white; border: none; padding: 10px 20px; border-radius: 20px; font-family: 'Patrick Hand', cursive; font-size: 1rem;">5 min</button>
+                        <button onclick="setPreset(3)" style="background: #e67e22; color: white; border: none; padding: 10px 20px; border-radius: 20px; font-family: 'Patrick Hand', cursive; font-size: 1rem;">3 min</button>
+                        <button onclick="setPreset(1)" style="background: #e67e22; color: white; border: none; padding: 10px 20px; border-radius: 20px; font-family: 'Patrick Hand', cursive; font-size: 1rem;">1 min</button>
+                    </div>
+                </div>
             </div>
             
             <!-- Bottom row: Room code | Awake | Reset -->
@@ -554,6 +573,13 @@
             // Clear inputs
             minInput.value = '';
             secInput.value = '';
+        }
+        
+        function setPreset(minutes) {
+            // Set timer to preset minutes and start
+            document.getElementById('timerMinutes').value = minutes;
+            document.getElementById('timerSeconds').value = 0;
+            startTimer();
         }
         
         function stopTimer() {
