@@ -256,6 +256,216 @@
             font-family: 'Patrick Hand', cursive;
             font-size: 1.1rem;
         }
+        
+        /* Timer Section Styles */
+        .timer-card {
+            background: linear-gradient(145deg, #fffef8 0%, #fff8dc 100%);
+            border-radius: 20px;
+            padding: 30px 25px;
+            box-shadow: 0 8px 32px rgba(139, 69, 19, 0.15), inset 0 2px 4px rgba(255, 255, 255, 0.8);
+            border: 2px solid #d4c4a8;
+            margin-bottom: 25px;
+        }
+        
+        .timer-section-title {
+            font-size: 1.5rem;
+            color: #8b4513;
+            margin-bottom: 20px;
+            font-family: 'Patrick Hand', cursive;
+        }
+        
+        .timer-inputs-row {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 25px;
+        }
+        
+        .timer-input-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.7);
+            padding: 12px 20px;
+            border-radius: 15px;
+            border: 2px solid #d4c4a8;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        
+        .timer-input-group input {
+            width: 80px;
+            padding: 12px;
+            border-radius: 10px;
+            border: 2px solid #d4c4a8;
+            font-size: 1.6rem;
+            text-align: center;
+            font-family: 'Patrick Hand', cursive;
+            background: #fffef5;
+            color: #3d2b1f;
+            font-weight: bold;
+        }
+        
+        .timer-input-group input:focus {
+            outline: none;
+            border-color: #8b4513;
+            box-shadow: 0 0 0 3px rgba(139, 69, 19, 0.2);
+        }
+        
+        .timer-input-group input::-webkit-inner-spin-button,
+        .timer-input-group input::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        
+        .timer-input-label {
+            color: #8b4513;
+            font-size: 1.1rem;
+            font-weight: bold;
+            font-family: 'Patrick Hand', cursive;
+            min-width: 35px;
+        }
+        
+        .presets-row {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .preset-btn {
+            background: linear-gradient(145deg, #f5deb3, #e6d2a0);
+            color: #8b4513;
+            border: 2px solid #d4c4a8;
+            padding: 10px 16px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Patrick Hand', cursive;
+            font-size: 1rem;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            min-width: 55px;
+        }
+        
+        .preset-btn:hover {
+            background: linear-gradient(145deg, #ffe4b5, #f0d9a8);
+            border-color: #8b4513;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+        }
+        
+        .control-buttons-row {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-bottom: 25px;
+        }
+        
+        .timer-control-btn {
+            padding: 15px 45px;
+            border-radius: 30px;
+            border: none;
+            font-size: 1.3rem;
+            font-family: 'Patrick Hand', cursive;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 120px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+        }
+        
+        .start-btn {
+            background: linear-gradient(145deg, #e67e22, #d35400) !important;
+            color: white;
+            border: 2px solid #bf6a2e;
+        }
+        
+        .start-btn:hover {
+            background: linear-gradient(145deg, #f39c12, #e67e22) !important;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(230, 126, 34, 0.5);
+        }
+        
+        .stop-btn {
+            background: linear-gradient(145deg, #d4a574, #b8860b);
+            color: white;
+            border: 2px solid #8b4513;
+        }
+        
+        .stop-btn:hover {
+            background: linear-gradient(145deg, #e6b87d, #d4a574);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(139, 90, 43, 0.4);
+        }
+        
+        .timer-display-container {
+            background: linear-gradient(145deg, #3d2b1f, #2a1f15);
+            border-radius: 50%;
+            width: 180px;
+            height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3), inset 0 4px 15px rgba(255,255,255,0.1);
+            border: 4px solid #d4c4a8;
+            position: relative;
+        }
+        
+        .timer-display-container.running {
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3), inset 0 4px 15px rgba(255,255,255,0.1), 0 0 40px rgba(230, 126, 34, 0.6);
+            border-color: #e67e22;
+            animation: glow 2s ease-in-out infinite;
+        }
+        
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 10px 40px rgba(0,0,0,0.3), inset 0 4px 15px rgba(255,255,255,0.1), 0 0 30px rgba(230, 126, 34, 0.4); }
+            50% { box-shadow: 0 10px 40px rgba(0,0,0,0.3), inset 0 4px 15px rgba(255,255,255,0.1), 0 0 50px rgba(230, 126, 34, 0.7); }
+        }
+        
+        .timer-display {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #f5deb3;
+            font-family: 'Courier New', monospace;
+            text-shadow: 0 0 20px rgba(245, 222, 179, 0.5);
+            letter-spacing: 2px;
+        }
+        
+        .timer-done .timer-display-container {
+            animation: bellShake 0.5s ease-in-out;
+            border-color: #ffd700;
+            box-shadow: 0 0 60px rgba(255, 215, 0, 0.8);
+        }
+        
+        @keyframes bellShake {
+            0%, 100% { transform: rotate(0deg); }
+            20% { transform: rotate(-10deg); }
+            40% { transform: rotate(10deg); }
+            60% { transform: rotate(-10deg); }
+            80% { transform: rotate(10deg); }
+        }
+        
+        .timer-done .timer-display {
+            color: #ffd700;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+            animation: pulse 0.5s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+        }
+        
+        .timer-note {
+            font-size: 0.9rem;
+            color: #8b4513;
+            opacity: 0.7;
+            margin-bottom: 15px;
+            font-style: italic;
+        }
     </style>
 </head>
 <body>
@@ -287,42 +497,48 @@
                 <div id="statusText" style="font-size: 1.2rem; color: #5d4037; margin-top: 5px;">Ready</div>
             </div>
             
-            <!-- TIMER SECTION - Clean layout -->
-            <div style="padding-top: 20px;">
-                <h2 style="font-size: 1.3rem; color: #8b4513; margin-bottom: 15px; font-family: 'Patrick Hand', cursive;">⏰ DINNER TIMER</h2>
+            <!-- TIMER SECTION - Enhanced stylish layout -->
+            <div class="timer-card">
+                <div class="timer-section-title">⏰ DINNER TIMER</div>
                 
-                <!-- Timer inputs on one row -->
-                <div style="display: flex; gap: 20px; align-items: center; justify-content: center; margin-bottom: 15px;">
-                    <div style="display: flex; align-items: center; gap: 8px;">
-                        <input type="number" id="timerMinutes" placeholder="0" min="0" max="99" 
-                               style="width: 70px; padding: 14px; border-radius: 12px; border: 2px solid #d4c4a8; font-size: 1.3rem; text-align: center; font-family: 'Patrick Hand', cursive;">
-                        <span style="color: #8b4513; font-size: 1.1rem;">min</span>
+                <div class="timer-note">Quick timers for cooking</div>
+                
+                <!-- Preset buttons -->
+                <div class="presets-row">
+                    <button onclick="setPreset(1)" class="preset-btn">🥚 1m</button>
+                    <button onclick="setPreset(3)" class="preset-btn">🥣 3m</button>
+                    <button onclick="setPreset(5)" class="preset-btn">🍝 5m</button>
+                    <button onclick="setPreset(10)" class="preset-btn">🍖 10m</button>
+                </div>
+                
+                <div class="presets-row">
+                    <button onclick="setPreset(15)" class="preset-btn">🥘 15m</button>
+                    <button onclick="setPreset(20)" class="preset-btn">🥧 20m</button>
+                    <button onclick="setPreset(30)" class="preset-btn">🍗 30m</button>
+                </div>
+                
+                <!-- Time inputs -->
+                <div class="timer-inputs-row">
+                    <div class="timer-input-group">
+                        <input type="number" id="timerMinutes" placeholder="0" min="0" max="99">
+                        <span class="timer-input-label">min</span>
                     </div>
-                    <div style="display: flex; align-items: center; gap: 8px;">
-                        <input type="number" id="timerSeconds" placeholder="0" min="0" max="59" 
-                               style="width: 70px; padding: 14px; border-radius: 12px; border: 2px solid #d4c4a8; font-size: 1.3rem; text-align: center; font-family: 'Patrick Hand', cursive;">
-                        <span style="color: #8b4513; font-size: 1.1rem;">sec</span>
+                    <div class="timer-input-group">
+                        <input type="number" id="timerSeconds" placeholder="0" min="0" max="59">
+                        <span class="timer-input-label">sec</span>
                     </div>
                 </div>
                 
-                <!-- Preset buttons - above Start/Stop -->
-                <div style="display: flex; gap: 8px; justify-content: center; margin-bottom: 12px;">
-                    <button onclick="setPreset(1)" style="background: linear-gradient(to bottom, #e6a23c, #cf9236); color: white; border: none; padding: 8px 14px; border-radius: 8px; font-family: 'Patrick Hand', cursive; font-size: 0.9rem; box-shadow: 0 2px 4px rgba(0,0,0,0.15);">1m</button>
-                    <button onclick="setPreset(3)" style="background: linear-gradient(to bottom, #e6a23c, #cf9236); color: white; border: none; padding: 8px 14px; border-radius: 8px; font-family: 'Patrick Hand', cursive; font-size: 0.9rem; box-shadow: 0 2px 4px rgba(0,0,0,0.15);">3m</button>
-                    <button onclick="setPreset(5)" style="background: linear-gradient(to bottom, #e6a23c, #cf9236); color: white; border: none; padding: 8px 14px; border-radius: 8px; font-family: 'Patrick Hand', cursive; font-size: 0.9rem; box-shadow: 0 2px 4px rgba(0,0,0,0.15);">5m</button>
-                    <button onclick="setPreset(10)" style="background: linear-gradient(to bottom, #e6a23c, #cf9236); color: white; border: none; padding: 8px 14px; border-radius: 8px; font-family: 'Patrick Hand', cursive; font-size: 0.9rem; box-shadow: 0 2px 4px rgba(0,0,0,0.15);">10m</button>
+                <!-- Start/Stop controls -->
+                <div class="control-buttons-row">
+                    <button onclick="startTimer()" class="timer-control-btn start-btn">Start</button>
+                    <button onclick="stopTimer()" class="timer-control-btn stop-btn">Stop</button>
                 </div>
                 
-                <!-- Start/Stop buttons - below presets -->
-                <div style="display: flex; gap: 20px; justify-content: center; margin-bottom: 20px;">
-                    <button onclick="startTimer()" 
-                            style="background: linear-gradient(to bottom, #e6a23c, #cf9236); color: white; border: none; padding: 12px 30px; border-radius: 12px; font-family: 'Patrick Hand', cursive; font-size: 1.1rem; box-shadow: 0 3px 6px rgba(0,0,0,0.2);">Start</button>
-                    <button onclick="stopTimer()" 
-                            style="background: linear-gradient(to bottom, #a0522d, #654321); color: white; border: none; padding: 12px 30px; border-radius: 12px; font-family: 'Patrick Hand', cursive; font-size: 1.1rem; box-shadow: 0 3px 6px rgba(0,0,0,0.2);">Stop</button>
+                <!-- Circular timer display -->
+                <div id="timerDisplayContainer" class="timer-display-container">
+                    <div id="timerDisplay" class="timer-display"></div>
                 </div>
-                
-                <!-- Timer countdown display -->
-                <div id="timerDisplay" style="font-size: 3rem; color: #e67e22; font-weight: bold; margin-bottom: 15px; min-height: 50px;"></div>
             </div>
             
             <!-- Bottom row: Room code | Awake | Reset -->
@@ -540,6 +756,7 @@
         let timerInterval = null;
         let timerSeconds = 0;
         const timerDisplay = document.getElementById('timerDisplay');
+        const timerDisplayContainer = document.getElementById('timerDisplayContainer');
         
         function startTimer() {
             const minInput = document.getElementById('timerMinutes');
@@ -549,10 +766,14 @@
             
             if (minutes === 0 && seconds === 0) return;
             
+            timerDisplayContainer.classList.remove('timer-done');
+            
             timerSeconds = (minutes * 60) + seconds;
             updateTimerDisplay();
             
             if (timerInterval) clearInterval(timerInterval);
+            
+            timerDisplayContainer.classList.add('running');
             
             timerInterval = setInterval(() => {
                 timerSeconds--;
@@ -561,13 +782,13 @@
                 if (timerSeconds <= 0) {
                     clearInterval(timerInterval);
                     timerInterval = null;
-                    // Timer finished - play alarm sound 3 times
                     playTimerAlarm();
-                    timerDisplay.textContent = "⏰ DONE!";
+                    timerDisplay.textContent = "00:00";
+                    timerDisplayContainer.classList.remove('running');
+                    timerDisplayContainer.classList.add('timer-done');
                 }
             }, 1000);
             
-            // Clear inputs
             minInput.value = '';
             secInput.value = '';
         }
@@ -586,6 +807,9 @@
             }
             timerSeconds = 0;
             timerDisplay.textContent = '';
+            if (timerDisplayContainer) {
+                timerDisplayContainer.classList.remove('running', 'timer-done');
+            }
         }
         
         function updateTimerDisplay() {
