@@ -275,22 +275,32 @@
         </div>
         
         <div id="mainApp" class="hidden">
-            <div class="room-info">
-                <div class="room-label">Room</div>
-                <div id="currentRoom" class="room-code">---</div>
-                <div class="ring-time" id="lastRing">Last rung: Never</div>
+            <!-- Hidden room info - shown subtly below -->
+            <div id="roomInfo" style="font-size: 0.75rem; color: #5d4037; opacity: 0.6; margin-bottom: 10px;">
+                Room: <span id="currentRoomSmall">---</span>
             </div>
             
             <button id="bellBtn" class="bell-button">🔔</button>
-            <div class="bell-label">Tap to ring!</div>
             
-            <div id="message" class="message">
-                <div class="message-content">Connected & ready</div>
+            <!-- Small status indicator instead of large message box -->
+            <div id="statusText" style="font-size: 1rem; color: #5d4037; margin-top: 5px; min-height: 24px;">Ready</div>
+            
+            <!-- Timer Section -->
+            <div style="margin-top: 15px; display: flex; gap: 10px; align-items: center; justify-content: center; flex-wrap: wrap;">
+                <input type="number" id="timerMinutes" placeholder="Min" min="0" max="99" style="width: 60px; padding: 8px; border-radius: 8px; border: 2px solid #d4c4a8; font-size: 1rem; text-align: center;">
+                <span style="color: #5d4037;">min</span>
+                <input type="number" id="timerSeconds" placeholder="Sec" min="0" max="59" style="width: 60px; padding: 8px; border-radius: 8px; border: 2px solid #d4c4a8; font-size: 1rem; text-align: center;">
+                <span style="color: #5d4037;">sec</span>
+                <button onclick="startTimer()" style="background: #228b22; color: white; border: none; padding: 8px 20px; border-radius: 20px; font-family: 'Patrick Hand', cursive; font-size: 1rem;">Start</button>
+                <button onclick="stopTimer()" style="background: #8b4513; color: white; border: none; padding: 8px 20px; border-radius: 20px; font-family: 'Patrick Hand', cursive; font-size: 1rem;">Stop</button>
             </div>
+            <div id="timerDisplay" style="font-size: 1.5rem; color: #e67e22; font-weight: bold; margin-top: 5px; min-height: 30px;"></div>
             
-            <button id="wakeLockBtn" onclick="toggleWakeLock()" class="reset-link">Keep Awake: Off</button>
-            <br>
-            <button onclick="resetApp()" class="reset-link">Reset / Change Room</button>
+            <!-- Bottom controls -->
+            <div style="margin-top: 20px; display: flex; gap: 20px; justify-content: center;">
+                <button id="wakeLockBtn" onclick="toggleWakeLock()" style="background: rgba(139, 69, 19, 0.15); border: 2px solid #d4c4a8; padding: 8px 15px; border-radius: 20px; color: #8b4513; font-family: 'Patrick Hand', cursive; font-size: 0.9rem;">Awake: Off</button>
+                <button onclick="resetApp()" style="background: none; border: none; color: #8b4513; font-size: 0.9rem; text-decoration: underline; font-family: 'Patrick Hand', cursive;">Reset</button>
+            </div>
         </div>
     </div>
 
@@ -374,7 +384,7 @@
         
         function enterRoom(roomCode) {
             currentRoom = roomCode;
-            currentRoomEl.textContent = roomCode;
+            document.getElementById('currentRoomSmall').textContent = roomCode;
             pairingSection.classList.add('hidden');
             mainApp.classList.remove('hidden');
             
@@ -431,7 +441,7 @@
             // Listen for when audio ends, then play next ring
             bellAudio.onended = function() {
                 if (playCount < maxPlays) {
-                    // Wait a brief pause between rings (0.8 seconds)
+                    // Wait a brief pause between rings
                     setTimeout(playNext, 0);
                 }
             };
@@ -439,22 +449,31 @@
             // Start first ring
             playNext();
             
+            // Use small status text instead of large message box
+            const statusText = document.getElementById('statusText');
+            
             if (isReceiver) {
                 // Receiver sees the excited message
-                messageContent.innerHTML = "<strong>Dinner is ready!</strong><br>COME AND GET EAT! 🔥";
-                message.style.background = "rgba(230, 126, 34, 0.25)";
+                statusText.innerHTML = "<strong>Dinner is ready!</strong> COME AND GET EAT! 🔥";
+                statusText.style.color = "#e67e22";
+                statusText.style.fontWeight = "bold";
                 
                 // Keep message for 8 seconds then back to ready
                 setTimeout(() => {
-                    messageContent.innerHTML = "Connected & ready";
-                    message.style.background = "rgba(255, 248, 220, 0.7)";
+                    statusText.textContent = "Ready";
+                    statusText.style.color = "#5d4037";
+                    statusText.style.fontWeight = "normal";
                 }, 8000);
             } else {
                 // Sender sees brief confirmation
-                messageContent.innerHTML = "Dinner bell ringing...";
-                message.style.background = "rgba(139, 69, 19, 0.2)";
+                statusText.textContent = "Ringing...";
+                statusText.style.color = "#8b4513";
                 
                 // Back to ready after 2 seconds
+                setTimeout(() => {
+                    statusText.textContent = "Ready";
+                    statusText.style.color = "#5d4037";
+                }, 2000);
                 setTimeout(() => {
                     messageContent.innerHTML = "Connected & ready";
                     message.style.background = "rgba(255, 248, 220, 0.7)";
@@ -486,6 +505,72 @@
             }, 200);
         });
         
+        // Timer functionality
+        let timerInterval = null;
+        let timerSeconds = 0;
+        const timerDisplay = document.getElementById('timerDisplay');
+        
+        function startTimer() {
+            const minInput = document.getElementById('timerMinutes');
+            const secInput = document.getElementById('timerSeconds');
+            const minutes = parseInt(minInput.value) || 0;
+            const seconds = parseInt(secInput.value) || 0;
+            
+            if (minutes === 0 && seconds === 0) return;
+            
+            timerSeconds = (minutes * 60) + seconds;
+            updateTimerDisplay();
+            
+            if (timerInterval) clearInterval(timerInterval);
+            
+            timerInterval = setInterval(() => {
+                timerSeconds--;
+                updateTimerDisplay();
+                
+                if (timerSeconds <= 0) {
+                    clearInterval(timerInterval);
+                    timerInterval = null;
+                    // Timer finished - play alarm sound 3 times
+                    playTimerAlarm();
+                    timerDisplay.textContent = "⏰ DONE!";
+                }
+            }, 1000);
+            
+            // Clear inputs
+            minInput.value = '';
+            secInput.value = '';
+        }
+        
+        function stopTimer() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+            timerSeconds = 0;
+            timerDisplay.textContent = '';
+        }
+        
+        function updateTimerDisplay() {
+            const mins = Math.floor(timerSeconds / 60);
+            const secs = timerSeconds % 60;
+            timerDisplay.textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+        
+        function playTimerAlarm() {
+            // Play the bell sound 3 times for timer
+            let count = 0;
+            const maxPlays = 3;
+            function playNext() {
+                if (count < maxPlays) {
+                    bellAudio.currentTime = 0;
+                    bellAudio.play().catch(e => console.log('Timer alarm failed:', e));
+                    count++;
+                    setTimeout(playNext, 800);
+                }
+            }
+            playNext();
+        }
+        
         // Wake Lock functionality
         let wakeLock = null;
         let wakeLockEnabled = false;
@@ -496,14 +581,14 @@
                 try {
                     wakeLock = await navigator.wakeLock.request('screen');
                     wakeLockEnabled = true;
-                    wakeLockBtn.textContent = 'Keep Awake: On';
+                    wakeLockBtn.textContent = 'Awake: On';
                     wakeLock.addEventListener('release', () => {
                         wakeLockEnabled = false;
-                        wakeLockBtn.textContent = 'Keep Awake: Off';
+                        wakeLockBtn.textContent = 'Awake: Off';
                     });
                 } catch (err) {
                     console.log('Wake Lock error:', err);
-                    wakeLockBtn.textContent = 'Not supported';
+                    wakeLockBtn.textContent = 'No support';
                 }
             } else {
                 if (wakeLock) {
@@ -511,7 +596,7 @@
                     wakeLock = null;
                 }
                 wakeLockEnabled = false;
-                wakeLockBtn.textContent = 'Keep Awake: Off';
+                wakeLockBtn.textContent = 'Awake: Off';
             }
         }
         
