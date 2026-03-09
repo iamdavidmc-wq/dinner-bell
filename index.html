@@ -305,7 +305,15 @@
                     </div>
                 </div>
                 
-                <!-- Start/Stop buttons - aligned under inputs -->
+                <!-- Preset buttons - above Start/Stop -->
+                <div style="display: flex; gap: 8px; justify-content: center; margin-bottom: 12px;">
+                    <button onclick="setPreset(1)" style="background: linear-gradient(to bottom, #e6a23c, #cf9236); color: white; border: none; padding: 8px 14px; border-radius: 8px; font-family: 'Patrick Hand', cursive; font-size: 0.9rem; box-shadow: 0 2px 4px rgba(0,0,0,0.15);">1m</button>
+                    <button onclick="setPreset(3)" style="background: linear-gradient(to bottom, #e6a23c, #cf9236); color: white; border: none; padding: 8px 14px; border-radius: 8px; font-family: 'Patrick Hand', cursive; font-size: 0.9rem; box-shadow: 0 2px 4px rgba(0,0,0,0.15);">3m</button>
+                    <button onclick="setPreset(5)" style="background: linear-gradient(to bottom, #e6a23c, #cf9236); color: white; border: none; padding: 8px 14px; border-radius: 8px; font-family: 'Patrick Hand', cursive; font-size: 0.9rem; box-shadow: 0 2px 4px rgba(0,0,0,0.15);">5m</button>
+                    <button onclick="setPreset(10)" style="background: linear-gradient(to bottom, #e6a23c, #cf9236); color: white; border: none; padding: 8px 14px; border-radius: 8px; font-family: 'Patrick Hand', cursive; font-size: 0.9rem; box-shadow: 0 2px 4px rgba(0,0,0,0.15);">10m</button>
+                </div>
+                
+                <!-- Start/Stop buttons - below presets -->
                 <div style="display: flex; gap: 20px; justify-content: center; margin-bottom: 20px;">
                     <button onclick="startTimer()" 
                             style="background: linear-gradient(to bottom, #2e8b2e, #1a6b1a); color: white; border: none; padding: 12px 30px; border-radius: 12px; font-family: 'Patrick Hand', cursive; font-size: 1.1rem; box-shadow: 0 3px 6px rgba(0,0,0,0.2);">Start</button>
@@ -315,14 +323,6 @@
                 
                 <!-- Timer countdown display -->
                 <div id="timerDisplay" style="font-size: 3rem; color: #e67e22; font-weight: bold; margin-bottom: 15px; min-height: 50px;"></div>
-                
-                <!-- Preset buttons - smaller, one line -->
-                <div style="display: flex; gap: 8px; justify-content: center;">
-                    <button onclick="setPreset(1)" style="background: linear-gradient(to bottom, #e6a23c, #cf9236); color: white; border: none; padding: 8px 14px; border-radius: 8px; font-family: 'Patrick Hand', cursive; font-size: 0.9rem; box-shadow: 0 2px 4px rgba(0,0,0,0.15);">1m</button>
-                    <button onclick="setPreset(3)" style="background: linear-gradient(to bottom, #e6a23c, #cf9236); color: white; border: none; padding: 8px 14px; border-radius: 8px; font-family: 'Patrick Hand', cursive; font-size: 0.9rem; box-shadow: 0 2px 4px rgba(0,0,0,0.15);">3m</button>
-                    <button onclick="setPreset(5)" style="background: linear-gradient(to bottom, #e6a23c, #cf9236); color: white; border: none; padding: 8px 14px; border-radius: 8px; font-family: 'Patrick Hand', cursive; font-size: 0.9rem; box-shadow: 0 2px 4px rgba(0,0,0,0.15);">5m</button>
-                    <button onclick="setPreset(10)" style="background: linear-gradient(to bottom, #e6a23c, #cf9236); color: white; border: none; padding: 8px 14px; border-radius: 8px; font-family: 'Patrick Hand', cursive; font-size: 0.9rem; box-shadow: 0 2px 4px rgba(0,0,0,0.15);">10m</button>
-                </div>
             </div>
             
             <!-- Bottom row: Room code | Awake | Reset -->
