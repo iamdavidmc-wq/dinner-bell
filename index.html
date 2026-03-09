@@ -883,7 +883,7 @@
         let wheelMode = 'minutes'; // 'minutes' or 'seconds'
         let wheelMinutes = 0;
         let wheelSeconds = 0;
-        let wheelRotation = 0;
+        let currentWheelValue = 0;
         let lastAngle = null;
         let isRotatingWheel = false;
         
@@ -936,6 +936,10 @@
         function handleWheelStart(e) {
             e.preventDefault();
             isRotatingWheel = true;
+            
+            // Store current value as starting point
+            currentWheelValue = wheelMode === 'minutes' ? wheelMinutes : wheelSeconds;
+            
             const coords = getWheelCenter(e);
             lastAngle = getAngle(coords.x, coords.y);
         }
@@ -953,13 +957,15 @@
             if (deltaAngle > 180) deltaAngle -= 360;
             if (deltaAngle < -180) deltaAngle += 360;
             
-            wheelRotation += deltaAngle;
+            // Convert angle delta to value delta (270 degrees = 60 units)
+            const valueDelta = (deltaAngle / 270) * 60;
+            let newValue = currentWheelValue + valueDelta;
             
-            // Calculate value based on rotation (270 degree range = full 0-60)
-            const maxValue = wheelMode === 'minutes' ? 60 : 60;
-            let newValue = Math.round((wheelRotation / 270) * maxValue);
-            newValue = Math.max(0, Math.min(maxValue, newValue));
+            // Clamp to 0-60
+            newValue = Math.max(0, Math.min(60, newValue));
+            newValue = Math.round(newValue);
             
+            // Update the value
             if (wheelMode === 'minutes') {
                 wheelMinutes = newValue;
                 document.getElementById('wheelValue').textContent = wheelMinutes;
@@ -969,10 +975,11 @@
             }
             
             // Update knob rotation visual
-            const rotationPercent = newValue / maxValue;
-            document.getElementById('wheelKnob').style.transform = `translateX(-50%) rotate(${rotationPercent * 270}deg)`;
+            const rotationDegrees = (newValue / 60) * 270;
+            document.getElementById('wheelKnob').style.transform = `translateX(-50%) rotate(${rotationDegrees}deg)`;
             
             lastAngle = currentAngle;
+            currentWheelValue = newValue;
         }
         
         function handleWheelEnd() {
@@ -985,12 +992,13 @@
             document.getElementById('modeMin').classList.toggle('active', mode === 'minutes');
             document.getElementById('modeSec').classList.toggle('active', mode === 'seconds');
             document.getElementById('wheelLabel').textContent = mode === 'minutes' ? 'min' : 'sec';
-            document.getElementById('wheelValue').textContent = mode === 'minutes' ? wheelMinutes : wheelSeconds;
+            
+            const displayValue = mode === 'minutes' ? wheelMinutes : wheelSeconds;
+            document.getElementById('wheelValue').textContent = displayValue;
             
             // Update knob position
-            const currentValue = mode === 'minutes' ? wheelMinutes : wheelSeconds;
-            const rotationPercent = currentValue / 60;
-            document.getElementById('wheelKnob').style.transform = `translateX(-50%) rotate(${rotationPercent * 270}deg)`;
+            const rotationDegrees = (displayValue / 60) * 270;
+            document.getElementById('wheelKnob').style.transform = `translateX(-50%) rotate(${rotationDegrees}deg)`;
         }
         
         // Start timer from wheel values
@@ -1045,7 +1053,7 @@
             // Reset wheel
             wheelMinutes = 0;
             wheelSeconds = 0;
-            wheelRotation = 0;
+            currentWheelValue = 0;
             document.getElementById('wheelValue').textContent = '0';
             document.getElementById('wheelKnob').style.transform = 'translateX(-50%) rotate(0deg)';
         }
