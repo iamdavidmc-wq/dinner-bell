@@ -239,6 +239,19 @@
             color: #654321;
         }
         
+        #wakeLockBtn {
+            background: rgba(139, 69, 19, 0.15);
+            border: 2px solid #d4c4a8;
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+        
+        #wakeLockBtn:hover {
+            background: rgba(139, 69, 19, 0.25);
+        }
+        
         #pairingStatus {
             font-family: 'Patrick Hand', cursive;
             font-size: 1.1rem;
@@ -275,6 +288,8 @@
                 <div class="message-content">Connected & ready</div>
             </div>
             
+            <button id="wakeLockBtn" onclick="toggleWakeLock()" class="reset-link">Keep Awake: Off</button>
+            <br>
             <button onclick="resetApp()" class="reset-link">Reset / Change Room</button>
         </div>
     </div>
@@ -471,7 +486,54 @@
             }, 200);
         });
         
+        // Wake Lock functionality
+        let wakeLock = null;
+        let wakeLockEnabled = false;
+        const wakeLockBtn = document.getElementById('wakeLockBtn');
+        
+        async function toggleWakeLock() {
+            if (!wakeLockEnabled) {
+                try {
+                    wakeLock = await navigator.wakeLock.request('screen');
+                    wakeLockEnabled = true;
+                    wakeLockBtn.textContent = 'Keep Awake: On';
+                    wakeLock.addEventListener('release', () => {
+                        wakeLockEnabled = false;
+                        wakeLockBtn.textContent = 'Keep Awake: Off';
+                    });
+                } catch (err) {
+                    console.log('Wake Lock error:', err);
+                    wakeLockBtn.textContent = 'Not supported';
+                }
+            } else {
+                if (wakeLock) {
+                    wakeLock.release();
+                    wakeLock = null;
+                }
+                wakeLockEnabled = false;
+                wakeLockBtn.textContent = 'Keep Awake: Off';
+            }
+        }
+        
+        // Re-acquire wake lock if page becomes visible again
+        document.addEventListener('visibilitychange', async () => {
+            if (wakeLockEnabled && document.visibilityState === 'visible') {
+                try {
+                    wakeLock = await navigator.wakeLock.request('screen');
+                } catch (err) {
+                    console.log('Wake Lock re-acquire error:', err);
+                }
+            }
+        });
+        
         function resetApp() {
+            // Release wake lock if active
+            if (wakeLock) {
+                wakeLock.release();
+                wakeLock = null;
+            }
+            wakeLockEnabled = false;
+            
             localStorage.removeItem('dinnerBellRoom');
             localStorage.removeItem('dinnerBellCurrentRoom');
             localStorage.removeItem('dinnerBellPairedRoom');
