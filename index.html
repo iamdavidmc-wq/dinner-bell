@@ -274,60 +274,85 @@
             font-family: 'Patrick Hand', cursive;
         }
         
-        .timer-inputs-row {
+        .timer-dial-container {
             display: flex;
-            gap: 15px;
-            align-items: center;
             justify-content: center;
+            align-items: center;
+            gap: 20px;
             margin-bottom: 15px;
         }
         
-        .timer-input-group {
+        .dial-wrapper {
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 8px;
-            background: rgba(255, 255, 255, 0.8);
-            padding: 8px 12px;
-            border-radius: 12px;
-            border: 2px solid #d4c4a8;
         }
         
-        .timer-input-group input {
-            width: 50px;
-            padding: 8px 4px;
-            border-radius: 8px;
-            border: 2px solid #d4c4a8;
-            font-size: 1.1rem;
-            text-align: center;
-            font-family: 'Patrick Hand', cursive;
-            background: #fffef5;
-            color: #3d2b1f;
-            font-weight: bold;
-            -webkit-appearance: none;
-            appearance: none;
-            -moz-appearance: textfield;
-        }
-        
-        .timer-input-group input:focus {
-            outline: none;
-            border-color: #8b4513;
-            box-shadow: 0 0 0 3px rgba(139, 69, 19, 0.2);
-        }
-        
-        .timer-input-group input::-webkit-inner-spin-button,
-        .timer-input-group input::-webkit-outer-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
-        
-        .timer-input-label {
+        .dial-label {
+            font-size: 0.85rem;
             color: #8b4513;
-            font-size: 0.9rem;
             font-weight: bold;
             font-family: 'Patrick Hand', cursive;
+            margin-bottom: 8px;
         }
         
-        .presets-row {
+        .dial {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #fffef8, #fff8dc);
+            border: 3px solid #d4c4a8;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15), inset 0 2px 4px rgba(255,255,255,0.8);
+            position: relative;
+            touch-action: none;
+            cursor: pointer;
+        }
+        
+        .dial-inner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2rem;
+            font-weight: bold;
+            color: #8b4513;
+            font-family: 'Courier New', monospace;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            pointer-events: none;
+        }
+        
+        .dial-knob {
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #e67e22, #d35400);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+        }
+        
+        .dial-ticks {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        
+        .dial-tick {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 2px;
+            height: 8px;
+            background: #d4c4a8;
+            transform-origin: center 50%;
+        }
+        
+        .preset-row {
             display: flex;
             gap: 6px;
             justify-content: center;
@@ -476,30 +501,25 @@
                 font-size: 1.5rem;
                 margin-bottom: 20px;
             }
-            .timer-inputs-row {
-                gap: 30px;
-                margin-bottom: 25px;
+            .dial {
+                width: 140px;
+                height: 140px;
             }
-            .timer-input-group {
-                padding: 12px 20px;
-                gap: 12px;
+            .dial-inner {
+                font-size: 2.5rem;
             }
-            .timer-input-group input {
-                width: 80px;
-                padding: 12px;
-                font-size: 1.6rem;
+            .dial-knob {
+                width: 20px;
+                height: 20px;
+                top: 10px;
             }
-            .timer-input-label {
-                font-size: 1.1rem;
-            }
-            .presets-row {
+            .preset-row {
                 gap: 10px;
                 margin-bottom: 20px;
             }
             .preset-btn {
                 padding: 10px 16px;
                 font-size: 1rem;
-                min-width: 55px;
             }
             .control-buttons-row {
                 gap: 20px;
@@ -557,26 +577,34 @@
             <div class="timer-card">
                 <div class="timer-section-title">⏰ DINNER TIMER</div>
                 
-                <div class="timer-note">Quick timers for cooking</div>
+                <div class="timer-note">Twist dials to set time</div>
+                
+                <!-- Circular dials for time selection -->
+                <div class="timer-dial-container">
+                    <div class="dial-wrapper">
+                        <span class="dial-label">Minutes</span>
+                        <div class="dial" id="minutesDial" data-type="minutes">
+                            <div class="dial-ticks"></div>
+                            <div class="dial-knob"></div>
+                            <div class="dial-inner" id="minutesValue">0</div>
+                        </div>
+                    </div>
+                    <div class="dial-wrapper">
+                        <span class="dial-label">Seconds</span>
+                        <div class="dial" id="secondsDial" data-type="seconds">
+                            <div class="dial-ticks"></div>
+                            <div class="dial-knob"></div>
+                            <div class="dial-inner" id="secondsValue">0</div>
+                        </div>
+                    </div>
+                </div>
                 
                 <!-- Preset buttons -->
-                <div class="presets-row">
+                <div class="preset-row">
                     <button onclick="setPreset(1)" class="preset-btn">🥚 1m</button>
                     <button onclick="setPreset(3)" class="preset-btn">🥣 3m</button>
                     <button onclick="setPreset(5)" class="preset-btn">🍝 5m</button>
                     <button onclick="setPreset(10)" class="preset-btn">🍖 10m</button>
-                </div>
-                
-                <!-- Time inputs -->
-                <div class="timer-inputs-row">
-                    <div class="timer-input-group">
-                        <input type="number" id="timerMinutes" placeholder="0" min="0" max="99">
-                        <span class="timer-input-label">min</span>
-                    </div>
-                    <div class="timer-input-group">
-                        <input type="number" id="timerSeconds" placeholder="0" min="0" max="59">
-                        <span class="timer-input-label">sec</span>
-                    </div>
                 </div>
                 
                 <!-- Start/Stop controls -->
@@ -808,11 +836,93 @@
         const timerDisplay = document.getElementById('timerDisplay');
         const timerDisplayContainer = document.getElementById('timerDisplayContainer');
         
+        // Dial state
+        let dialMinutes = 0;
+        let dialSeconds = 0;
+        let dialStartY = 0;
+        let dialStartValue = 0;
+        let isDraggingDial = false;
+        
+        // Initialize dials
+        function initDials() {
+            const minutesDial = document.getElementById('minutesDial');
+            const secondsDial = document.getElementById('secondsDial');
+            
+            [minutesDial, secondsDial].forEach(dial => {
+                dial.addEventListener('touchstart', handleDialStart, { passive: false });
+                dial.addEventListener('touchmove', handleDialMove, { passive: false });
+                dial.addEventListener('touchend', handleDialEnd);
+                dial.addEventListener('mousedown', handleDialStart);
+            });
+            
+            document.addEventListener('mousemove', handleDialMove);
+            document.addEventListener('mouseup', handleDialEnd);
+        }
+        
+        function handleDialStart(e) {
+            e.preventDefault();
+            isDraggingDial = true;
+            const dial = e.currentTarget;
+            const type = dial.dataset.type;
+            
+            if (e.type === 'touchstart') {
+                dialStartY = e.touches[0].clientY;
+            } else {
+                dialStartY = e.clientY;
+            }
+            
+            dialStartValue = type === 'minutes' ? dialMinutes : dialSeconds;
+            dial.classList.add('dragging');
+        }
+        
+        function handleDialMove(e) {
+            if (!isDraggingDial) return;
+            e.preventDefault();
+            
+            const activeDial = document.querySelector('.dial.dragging');
+            if (!activeDial) return;
+            
+            const type = activeDial.dataset.type;
+            let currentY = e.type === 'touchmove' ? e.touches[0].clientY : e.clientY;
+            
+            // Calculate change - dragging up increases, down decreases
+            const deltaY = dialStartY - currentY;
+            const sensitivity = type === 'minutes' ? 0.5 : 1; // More sensitive for seconds
+            
+            let newValue;
+            if (type === 'minutes') {
+                newValue = Math.max(0, Math.min(60, dialStartValue + Math.floor(deltaY * sensitivity)));
+            } else {
+                newValue = Math.max(0, Math.min(59, dialStartValue + Math.floor(deltaY * sensitivity)));
+            }
+            
+            if (type === 'minutes') {
+                dialMinutes = newValue;
+                document.getElementById('minutesValue').textContent = dialMinutes;
+                updateDialRotation(activeDial, dialMinutes, 60);
+            } else {
+                dialSeconds = newValue;
+                document.getElementById('secondsValue').textContent = dialSeconds;
+                updateDialRotation(activeDial, dialSeconds, 60);
+            }
+        }
+        
+        function handleDialEnd() {
+            isDraggingDial = false;
+            document.querySelectorAll('.dial').forEach(dial => dial.classList.remove('dragging'));
+        }
+        
+        function updateDialRotation(dial, value, max) {
+            // Rotate the knob based on value (0 to max = 0 to 270 degrees)
+            const rotation = (value / max) * 270;
+            const knob = dial.querySelector('.dial-knob');
+            knob.style.transform = `translateX(-50%) rotate(${rotation}deg)`;
+        }
+        
+        // Quick preset from dial values
         function startTimer() {
-            const minInput = document.getElementById('timerMinutes');
-            const secInput = document.getElementById('timerSeconds');
-            const minutes = parseInt(minInput.value) || 0;
-            const seconds = parseInt(secInput.value) || 0;
+            const minutes = dialMinutes;
+            const seconds = dialSeconds;
             
             if (minutes === 0 && seconds === 0) return;
             
@@ -839,15 +949,15 @@
                     timerDisplayContainer.classList.add('timer-done');
                 }
             }, 1000);
-            
-            minInput.value = '';
-            secInput.value = '';
         }
         
         function setPreset(minutes) {
-            // Set timer to preset minutes and start
-            document.getElementById('timerMinutes').value = minutes;
-            document.getElementById('timerSeconds').value = 0;
+            dialMinutes = minutes;
+            dialSeconds = 0;
+            document.getElementById('minutesValue').textContent = dialMinutes;
+            document.getElementById('secondsValue').textContent = dialSeconds;
+            updateDialRotation(document.getElementById('minutesDial'), dialMinutes, 60);
+            updateDialRotation(document.getElementById('secondsDial'), dialSeconds, 60);
             startTimer();
         }
         
@@ -861,6 +971,14 @@
             if (timerDisplayContainer) {
                 timerDisplayContainer.classList.remove('running', 'timer-done', 'show');
             }
+            // Reset dials
+            dialMinutes = 0;
+            dialSeconds = 0;
+            document.getElementById('minutesValue').textContent = '0';
+            document.getElementById('secondsValue').textContent = '0';
+            document.querySelectorAll('.dial').forEach(dial => {
+                updateDialRotation(dial, 0, 60);
+            });
         }
         
         function updateTimerDisplay() {
@@ -883,18 +1001,6 @@
             }
             playNext();
         }
-        
-        // Timer keyboard support - press Enter to start
-        document.getElementById('timerMinutes').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                document.getElementById('timerSeconds').focus();
-            }
-        });
-        document.getElementById('timerSeconds').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                startTimer();
-            }
-        });
         
         // Wake Lock functionality
         let wakeLock = null;
@@ -964,6 +1070,8 @@
             } else {
                 // Stay on setup screen
             }
+            // Initialize the dials
+            initDials();
         });
     </script>
 </body>
