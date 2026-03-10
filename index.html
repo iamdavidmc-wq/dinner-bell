@@ -540,55 +540,78 @@
             }
         }
         
-        /* Acknowledgment Banner */
-        .ack-banner {
-            background: linear-gradient(135deg, #2e8b2e, #1e6b1e);
-            color: white;
-            padding: 12px 18px;
-            border-radius: 12px;
-            margin-top: 12px;
-            font-size: 1.1rem;
-            display: flex;
+        /* Acknowledgment Popup */
+        .ack-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            display: none;
             align-items: center;
-            justify-content: space-between;
-            gap: 10px;
-            box-shadow: 0 4px 15px rgba(46, 139, 46, 0.4);
-            animation: ackSlideIn 0.3s ease-out;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
         }
         
-        @keyframes ackSlideIn {
+        .ack-overlay.show {
+            display: flex;
+        }
+        
+        .ack-popup {
+            background: linear-gradient(145deg, #5d4037, #3d2b1f);
+            border: 4px solid #d4a574;
+            border-radius: 25px;
+            padding: 40px 35px;
+            text-align: center;
+            max-width: 450px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            animation: ackPopIn 0.4s ease-out;
+        }
+        
+        @keyframes ackPopIn {
             from {
                 opacity: 0;
-                transform: translateY(-10px);
+                transform: scale(0.8);
             }
             to {
                 opacity: 1;
-                transform: translateY(0);
+                transform: scale(1);
             }
         }
         
-        .ack-banner.hidden {
-            display: none;
+        .ack-popup-icon {
+            font-size: 4rem;
+            margin-bottom: 15px;
+        }
+        
+        .ack-popup-text {
+            color: #f5deb3;
+            font-size: 2rem;
+            line-height: 1.4;
+            margin-bottom: 25px;
+            font-family: 'Patrick Hand', cursive;
         }
         
         .ack-close {
-            background: rgba(255, 255, 255, 0.2);
+            background: #d4a574;
             border: none;
-            color: white;
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            font-size: 1rem;
+            color: #3d2b1f;
+            padding: 15px 40px;
+            border-radius: 30px;
+            font-size: 1.3rem;
+            font-family: 'Patrick Hand', cursive;
+            font-weight: bold;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background 0.2s;
-            flex-shrink: 0;
+            transition: all 0.2s;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
         }
         
         .ack-close:hover {
-            background: rgba(255, 255, 255, 0.3);
+            background: #e6b87d;
+            transform: translateY(-2px);
         }
         
         /* Receiver: Bell tap to acknowledge feedback */
@@ -631,10 +654,14 @@
                 <!-- Status text below bell -->
                 <div id="statusText" style="font-size: 1.2rem; color: #5d4037; margin-top: 5px;">Ready</div>
                 
-                <!-- Acknowledgment banner (hidden by default) -->
-                <div id="ackBanner" class="ack-banner hidden">
-                    <span id="ackText"></span>
-                    <button id="ackClose" class="ack-close" onclick="dismissAck()">✕</button>
+            </div>
+            
+            <!-- Acknowledgment popup (hidden by default) -->
+            <div id="ackOverlay" class="ack-overlay">
+                <div class="ack-popup">
+                    <div class="ack-popup-icon">🏃‍♂️</div>
+                    <div id="ackText" class="ack-popup-text"></div>
+                    <button class="ack-close" onclick="dismissAck()">Got it!</button>
                 </div>
             </div>
             
@@ -744,13 +771,13 @@
         
         // ========== ACKNOWLEDGMENT FEATURE ==========
         const ackMessages = [
-            "Someone's belly is rumbling... they're on the way! 🍽️",
-            "The dinner bell was heard! 🎯",
-            "Got the message! Someone's sprinting to the table! 🏃‍♂️",
-            "Acknowledged! The dinner call was received! ✅",
-            "They heard it! Food fever is activating! 🔥",
-            "Someone's coming! The hunger has been triggered! 🤤",
-            "Dinner received! Plates are about to be filled! 🍴"
+            "On my way! 🏃‍♂️",
+            "Heard it! Coming! 🍽️",
+            "My belly is rumbling... coming! 🤤",
+            "Dinner time! Be right there! 🔥",
+            "Got it! Heading to the table! 🍴",
+            "OK! I'll be right there! 🎯",
+            "Coming! Don't start without me! 🏃‍♀️"
         ];
         
         let lastRingTimestamp = 0;
@@ -759,15 +786,15 @@
         let ackListener = null;
         
         function dismissAck() {
-            document.getElementById('ackBanner').classList.add('hidden');
+            document.getElementById('ackOverlay').classList.remove('show');
         }
         
         function showAckMessage() {
             const ackText = document.getElementById('ackText');
-            const ackBanner = document.getElementById('ackBanner');
+            const ackOverlay = document.getElementById('ackOverlay');
             const randomMsg = ackMessages[Math.floor(Math.random() * ackMessages.length)];
             ackText.textContent = randomMsg;
-            ackBanner.classList.remove('hidden');
+            ackOverlay.classList.add('show');
         }
         
         function startAckListener() {
@@ -786,7 +813,7 @@
         }
         
         function clearAckBanner() {
-            document.getElementById('ackBanner').classList.add('hidden');
+            document.getElementById('ackOverlay').classList.remove('show');
         }
         
         // If already paired (has a different room in localStorage), join it directly
