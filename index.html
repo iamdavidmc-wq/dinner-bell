@@ -539,6 +539,68 @@
                 font-size: 3rem;
             }
         }
+        
+        /* Acknowledgment Banner */
+        .ack-banner {
+            background: linear-gradient(135deg, #2e8b2e, #1e6b1e);
+            color: white;
+            padding: 12px 18px;
+            border-radius: 12px;
+            margin-top: 12px;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            box-shadow: 0 4px 15px rgba(46, 139, 46, 0.4);
+            animation: ackSlideIn 0.3s ease-out;
+        }
+        
+        @keyframes ackSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .ack-banner.hidden {
+            display: none;
+        }
+        
+        .ack-close {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+            flex-shrink: 0;
+        }
+        
+        .ack-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        /* Receiver: Bell tap to acknowledge feedback */
+        .bell-acked {
+            animation: bellAck 0.3s ease-out;
+        }
+        
+        @keyframes bellAck {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+            100% { transform: scale(1); }
+        }
     </style>
 </head>
 <body>
@@ -568,6 +630,12 @@
                 
                 <!-- Status text below bell -->
                 <div id="statusText" style="font-size: 1.2rem; color: #5d4037; margin-top: 5px;">Ready</div>
+                
+                <!-- Acknowledgment banner (hidden by default) -->
+                <div id="ackBanner" class="ack-banner hidden">
+                    <span id="ackText"></span>
+                    <button id="ackClose" class="ack-close" onclick="dismissAck()">✕</button>
+                </div>
             </div>
             
             <!-- TIMER SECTION - Enhanced stylish layout -->
@@ -674,6 +742,53 @@
         
         myRoomCodeEl.textContent = currentRoom;
         
+        // ========== ACKNOWLEDGMENT FEATURE ==========
+        const ackMessages = [
+            "Someone's belly is rumbling... they're on the way! 🍽️",
+            "The dinner bell was heard! 🎯",
+            "Got the message! Someone's sprinting to the table! 🏃‍♂️",
+            "Acknowledged! The dinner call was received! ✅",
+            "They heard it! Food fever is activating! 🔥",
+            "Someone's coming! The hunger has been triggered! 🤤",
+            "Dinner received! Plates are about to be filled! 🍴"
+        ];
+        
+        let lastRingTimestamp = 0;
+        let lastAckTimestamp = 0;
+        let hasReceivedRing = false;
+        let ackListener = null;
+        
+        function dismissAck() {
+            document.getElementById('ackBanner').classList.add('hidden');
+        }
+        
+        function showAckMessage() {
+            const ackText = document.getElementById('ackText');
+            const ackBanner = document.getElementById('ackBanner');
+            const randomMsg = ackMessages[Math.floor(Math.random() * ackMessages.length)];
+            ackText.textContent = randomMsg;
+            ackBanner.classList.remove('hidden');
+        }
+        
+        function startAckListener() {
+            if (ackListener) {
+                db.ref('rooms/' + currentRoom + '/ack').off();
+            }
+            
+            ackListener = db.ref('rooms/' + currentRoom + '/ack');
+            ackListener.on('value', (snapshot) => {
+                const data = snapshot.val();
+                if (data && data.timestamp > lastRingTimestamp && data.timestamp > lastAckTimestamp) {
+                    lastAckTimestamp = data.timestamp;
+                    showAckMessage();
+                }
+            });
+        }
+        
+        function clearAckBanner() {
+            document.getElementById('ackBanner').classList.add('hidden');
+        }
+        
         // If already paired (has a different room in localStorage), join it directly
         const pairedRoom = localStorage.getItem('dinnerBellPairedRoom');
         if (pairedRoom) {
@@ -736,6 +851,9 @@
                 online: true,
                 lastSeen: Date.now()
             });
+            
+            // Start listening for acknowledgments (in case we ring later)
+            startAckListener();
         }
         
         function getDeviceId() {
@@ -748,6 +866,11 @@
         }
         
         function triggerBell(isReceiver) {
+            // Mark that this device has received a ring (can now acknowledge)
+            if (isReceiver) {
+                hasReceivedRing = true;
+            }
+            
             // Play sound three times, waiting for each to finish
             let playCount = 0;
             const maxPlays = 3;
@@ -807,11 +930,45 @@
         bellBtn.addEventListener('click', () => {
             if (!currentRoom) return;
             
+            // Check if this is a receiver who received a ring and is acknowledging
+            if (hasReceivedRing) {
+                // Send acknowledgment
+                db.ref('rooms/' + currentRoom + '/ack').set({
+                    timestamp: Date.now()
+                });
+                
+                // Visual feedback for ack sent
+                bellBtn.classList.add('bell-acked');
+                setTimeout(() => {
+                    bellBtn.classList.remove('bell-acked');
+                }, 300);
+                
+                // Show "On my way!" feedback briefly
+                const statusText = document.getElementById('statusText');
+                statusText.textContent = "✓ On my way!";
+                statusText.style.color = "#2e8b2e";
+                setTimeout(() => {
+                    statusText.textContent = "Ready";
+                    statusText.style.color = "#5d4037";
+                }, 2000);
+                
+                // Reset the received ring flag
+                hasReceivedRing = false;
+                return;
+            }
+            
+            // Clear any existing ack banner when ringing (new ring = new session)
+            clearAckBanner();
+            lastRingTimestamp = Date.now();
+            
             // Write ring event to database
             db.ref('rooms/' + currentRoom + '/ring').set({
                 active: true,
                 timestamp: Date.now()
             });
+            
+            // Start listening for acknowledgments (in case we get any)
+            startAckListener();
             
             // Also update last ring time locally
             const now = new Date();
