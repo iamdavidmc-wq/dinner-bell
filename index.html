@@ -789,6 +789,16 @@
             document.getElementById('ackOverlay').classList.remove('show');
         }
         
+        function dismissReceiverMessage() {
+            const statusText = document.getElementById('statusText');
+            statusText.textContent = "Ready";
+            statusText.style.color = "#5d4037";
+            statusText.style.fontWeight = "normal";
+            statusText.style.cursor = "default";
+            statusText.onclick = null;
+            hasReceivedRing = false;
+        }
+        
         function showAckMessage() {
             const ackText = document.getElementById('ackText');
             const ackOverlay = document.getElementById('ackOverlay');
@@ -927,17 +937,12 @@
             const statusText = document.getElementById('statusText');
             
             if (isReceiver) {
-                // Receiver sees the excited message
-                statusText.innerHTML = "<strong>Dinner is ready!</strong> COME AND GET EAT! 🔥";
+                // Receiver sees the excited message - stays until they dismiss or reply
+                statusText.innerHTML = "<strong>Dinner is ready!</strong> COME AND GET EAT! 🔥<br><span style='font-size:0.85rem;opacity:0.8'>Tap bell to reply</span>";
                 statusText.style.color = "#e67e22";
                 statusText.style.fontWeight = "bold";
-                
-                // Keep message for 8 seconds then back to ready
-                setTimeout(() => {
-                    statusText.textContent = "Ready";
-                    statusText.style.color = "#5d4037";
-                    statusText.style.fontWeight = "normal";
-                }, 8000);
+                statusText.style.cursor = "pointer";
+                statusText.onclick = dismissReceiverMessage;
             } else {
                 // Sender sees brief confirmation
                 statusText.textContent = "Ringing...";
@@ -980,6 +985,8 @@
                 statusText.textContent = "✓ Sent!";
                 statusText.style.color = "#2e8b2e";
                 statusText.style.fontWeight = "bold";
+                statusText.style.cursor = "default";
+                statusText.onclick = null;
                 
                 // Reset the received ring flag
                 hasReceivedRing = false;
