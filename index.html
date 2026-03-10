@@ -624,6 +624,48 @@
             50% { transform: scale(1.15); }
             100% { transform: scale(1); }
         }
+        
+        /* Reply Button - appears when receiver gets a ring */
+        .reply-btn {
+            background: linear-gradient(145deg, #2e8b2e, #1e6b1e);
+            color: white;
+            border: 3px solid #1e5b1e;
+            padding: 14px 30px;
+            font-size: 1.3rem;
+            font-family: 'Patrick Hand', cursive;
+            font-weight: bold;
+            border-radius: 30px;
+            cursor: pointer;
+            margin-top: 12px;
+            box-shadow: 0 4px 15px rgba(46, 139, 46, 0.4);
+            transition: all 0.2s ease;
+            animation: replySlideIn 0.3s ease-out;
+        }
+        
+        @keyframes replySlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .reply-btn:hover {
+            background: linear-gradient(145deg, #3aa53a, #2e8b2e);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(46, 139, 46, 0.5);
+        }
+        
+        .reply-btn:active {
+            transform: scale(0.98);
+        }
+        
+        .reply-btn.hidden {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -650,6 +692,9 @@
                 
                 <!-- Large centered bell -->
                 <button id="bellBtn" class="bell-button">🔔</button>
+                
+                <!-- Reply button (hidden until receiver gets a ring) -->
+                <button id="replyBtn" class="reply-btn hidden" onclick="sendReply()">🏃‍♂️ I'm Coming!</button>
                 
                 <!-- Status text below bell -->
                 <div id="statusText" style="font-size: 1.2rem; color: #5d4037; margin-top: 5px;">Ready</div>
@@ -789,6 +834,46 @@
             document.getElementById('ackOverlay').classList.remove('show');
         }
         
+        function showReplyButton() {
+            document.getElementById('replyBtn').classList.remove('hidden');
+        }
+        
+        function hideReplyButton() {
+            document.getElementById('replyBtn').classList.add('hidden');
+        }
+        
+        function sendReply() {
+            if (!currentRoom || !hasReceivedRing) return;
+            
+            // Send acknowledgment
+            db.ref('rooms/' + currentRoom + '/ack').set({
+                timestamp: Date.now()
+            });
+            
+            // Clear the ring on Firebase so we don't re-receive it
+            db.ref('rooms/' + currentRoom + '/ring').set(null);
+            
+            // Visual feedback
+            const replyBtn = document.getElementById('replyBtn');
+            replyBtn.textContent = "✓ Sent!";
+            replyBtn.style.background = "linear-gradient(145deg, #666, #444)";
+            
+            // Reset after a moment
+            setTimeout(() => {
+                replyBtn.textContent = "🏃‍♂️ I'm Coming!";
+                replyBtn.style.background = "linear-gradient(145deg, #2e8b2e, #1e6b1e)";
+                hideReplyButton();
+            }, 2000);
+            
+            // Clear receiver message
+            const statusText = document.getElementById('statusText');
+            statusText.textContent = "Ready";
+            statusText.style.color = "#5d4037";
+            statusText.style.fontWeight = "normal";
+            
+            hasReceivedRing = false;
+        }
+        
         function dismissReceiverMessage() {
             const statusText = document.getElementById('statusText');
             statusText.textContent = "Ready";
@@ -797,6 +882,7 @@
             statusText.style.cursor = "default";
             statusText.onclick = null;
             hasReceivedRing = false;
+            hideReplyButton();
         }
         
         function showAckMessage() {
@@ -908,6 +994,7 @@
             // Mark that this device has received a ring (can now acknowledge)
             if (isReceiver) {
                 hasReceivedRing = true;
+                showReplyButton();
             }
             
             // Play sound three times, waiting for each to finish
@@ -964,45 +1051,17 @@
         bellBtn.addEventListener('click', () => {
             if (!currentRoom) return;
             
-            // Check if this is a receiver who received a ring and is acknowledging
-            if (hasReceivedRing) {
-                // Send acknowledgment
-                db.ref('rooms/' + currentRoom + '/ack').set({
-                    timestamp: Date.now()
-                });
-                
-                // Clear the ring on Firebase so we don't re-receive it
-                db.ref('rooms/' + currentRoom + '/ring').set(null);
-                
-                // Visual feedback for ack sent
-                bellBtn.classList.add('bell-acked');
-                setTimeout(() => {
-                    bellBtn.classList.remove('bell-acked');
-                }, 300);
-                
-                // Show "On my way!" feedback
-                const statusText = document.getElementById('statusText');
-                statusText.textContent = "✓ Sent!";
-                statusText.style.color = "#2e8b2e";
-                statusText.style.fontWeight = "bold";
-                statusText.style.cursor = "default";
-                statusText.onclick = null;
-                
-                // Reset the received ring flag
-                hasReceivedRing = false;
-                return;
-            }
-            
             // Clear any existing ack banner when ringing (new ring = new session)
             clearAckBanner();
             lastRingTimestamp = Date.now();
             lastAckTimestamp = 0;
             
-            // Reset status text
+            // Reset status text and hide reply button
             const statusText = document.getElementById('statusText');
             statusText.textContent = "Ready";
             statusText.style.color = "#5d4037";
             statusText.style.fontWeight = "normal";
+            hideReplyButton();
             
             // Write ring event to database
             db.ref('rooms/' + currentRoom + '/ring').set({
